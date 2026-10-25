@@ -40,6 +40,11 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Auth::routes();
 
 Route::get('/',[SiteController::class, 'index'])->name('site.index');
+Route::get('/lang/{locale}', function ($locale) {
+    abort_unless(in_array($locale, ['ar', 'en']), 404);
+    session(['locale' => $locale]);
+    return back();
+})->name('lang.switch');
 Route::group(['middleware' => ['auth']], function(){
  Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
  Route::get('/about',[SiteController::class, 'about'])->name('site.about');
