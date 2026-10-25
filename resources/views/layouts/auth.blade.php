@@ -7,13 +7,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/tokens.css') }}">
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
 </head>
 <body>
 <div class="auth">
   <aside class="auth-side">
     <a class="brand" href="{{ route('site.index') }}">
-      <span class="brand-mark" style="color:#14213d">@include('includes.icon', ['name' => 'cap'])</span>
+      <span class="brand-mark" style="color:var(--on-orange)">@include('includes.icon', ['name' => 'cap'])</span>
       <span class="brand-name">
         <strong>EduCenter</strong>
         <small>{{ __('site.brand_sub') }}</small>

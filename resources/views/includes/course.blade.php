@@ -14,7 +14,10 @@
     @endif
   </div>
   <div class="course-body">
-    <h3>{{ $item->title }}</h3>
+    @if ($tone)
+      <span class="tag tone-{{ $tone }}">{{ $item->teacher->category->name_major }}</span>
+    @endif
+    <h3><a href="{{ route('site.course', $item->id) }}" class="stretch">{{ $item->title }}</a></h3>
     <p>{{ Str::limit($item->description, 90) }}</p>
     @isset($item->students_count)
       <div class="course-meta">{{ __('site.students_count', ['count' => $item->students_count]) }}</div>
@@ -38,6 +41,8 @@
             @method('DELETE')
             <button type="submit" class="btn btn-danger-soft btn-sm">{{ __('site.unenroll') }}</button>
           </form>
+        @elseif (! $item->teacher)
+          <span class="tag">{{ __('site.soon') }}</span>
         @else
           <form action="{{ route('courses.enroll', $item->id) }}" method="POST">
             @csrf

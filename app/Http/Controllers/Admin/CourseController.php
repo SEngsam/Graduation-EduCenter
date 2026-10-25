@@ -169,13 +169,13 @@ class CourseController extends Controller
 
         if (!$user || (!$user->hasRole(Role::ROLE_STUDENT) && !$user->hasAbility('enroll_courses'))) {
 
-            return redirect()->back()->with('error', 'Only students can enroll in courses.');
+            return redirect()->back()->with('error', __('site.msg_only_students'));
         }
 
 
         $course = Course::find($course_id);
         if (!$course) {
-            return redirect()->back()->with('error', 'Course not found.');
+            return redirect()->back()->with('error', __('site.msg_course_missing'));
         }
         $student_id = $user->student?->id ?? $user->id;
         $alreadyEnrolled = Registration::where('student_id', $student_id)
@@ -184,8 +184,12 @@ class CourseController extends Controller
 
         if ($alreadyEnrolled) {
 
-            return redirect()->back()->with('error', 'You are already enrolled in this course.');
+            return redirect()->back()->with('error', __('site.msg_already_enrolled'));
         }
+        if (! $course->teacher_id) {
+            return redirect()->back()->with('error', __('site.msg_no_teacher_yet'));
+        }
+
         $teacherId = $course->teacher_id;
 
         Registration::create([
@@ -194,7 +198,7 @@ class CourseController extends Controller
             'teacher_id' => $teacherId,
         ]);
 
-        return redirect()->back()->with('success', 'You have successfully enrolled in the course!');
+        return redirect()->back()->with('success', __('site.msg_enrolled'));
     }
     public function removeEnrollment($courseId)
     {
@@ -202,16 +206,16 @@ class CourseController extends Controller
         $student = $auth_user->student ?? $auth_user;
 
         if (!$student) {
-            return redirect()->route('admin.index')->with('error', 'Student profile not found.');
+            return redirect()->back()->with('error', __('site.msg_no_student'));
         }
 
         if ($student->courses()->where('courses.id', $courseId)->exists()) {
             $student->courses()->detach($courseId);
 
-            return redirect()->route('admin.index')->with('success', 'You have successfully removed the course.');
+            return redirect()->back()->with('success', __('site.msg_dropped'));
         }
 
-        return redirect()->route('admin.index')->with('error', 'You are not enrolled in this course.');
+        return redirect()->back()->with('error', __('site.msg_not_enrolled'));
     }
     public function assignTeacher(Request $request)
     {
@@ -228,6 +232,6 @@ class CourseController extends Controller
             return redirect()->route('admin.courses.index')->with('success', 'Teacher assigned successfully!');
         }
 
-        return redirect()->route('admin.courses.index')->with('error', 'Course not found.');
+        return redirect()->route('admin.courses.index')->with('error', __('site.msg_course_missing'));
     }
 }

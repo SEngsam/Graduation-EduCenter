@@ -26,15 +26,44 @@
 </section>
 @endforeach
 
+<section class="section">
+  <div class="container values">
+    <div class="card">
+      <span class="icon-box">@include('includes.icon', ['name' => 'user', 'size' => 24])</span>
+      <h3>{{ __('site.value_teachers') }}</h3>
+      <p>{{ __('site.value_teachers_text') }}</p>
+    </div>
+    <div class="card">
+      <span class="icon-box">@include('includes.icon', ['name' => 'check', 'size' => 24])</span>
+      <h3>{{ __('site.value_enroll') }}</h3>
+      <p>{{ __('site.value_enroll_text') }}</p>
+    </div>
+    <div class="card">
+      <span class="icon-box">@include('includes.icon', ['name' => 'calendar', 'size' => 24])</span>
+      <h3>{{ __('site.value_events') }}</h3>
+      <p>{{ __('site.value_events_text') }}</p>
+    </div>
+  </div>
+</section>
+
 @if ($teachers->count())
 <section class="section" style="padding-bottom:72px">
   <div class="container">
     <div class="section-head">
       <h2>{{ __('site.our_teachers') }}</h2>
+      <a href="{{ route('site.teachers') }}" class="btn btn-outline">{{ __('site.teachers') }}</a>
     </div>
     <div class="grid">
       @foreach ($teachers as $item)
-        @include('includes.teacher')
+        @php
+          $photo = $item->image && file_exists(public_path('uploads/teachers/' . $item->image))
+              ? asset('uploads/teachers/' . $item->image)
+              : asset('frontend/images/teachers/teacher-' . ($item->id % 3 + 1) . '.jpg');
+        @endphp
+        <div class="card team-row">
+          <img class="avatar" src="{{ $photo }}" alt="">
+          <div><strong>{{ $item->name }}</strong><span>{{ $item->major }}</span></div>
+        </div>
       @endforeach
     </div>
   </div>

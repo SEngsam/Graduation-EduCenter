@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/tokens.css') }}">
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
   @yield('styles')
 </head>
@@ -15,7 +16,7 @@
 <header class="site-header" id="siteHeader">
   <div class="container">
     <a class="brand" href="{{ route('site.index') }}">
-      <span class="brand-mark" style="color:#14213d">@include('includes.icon', ['name' => 'cap'])</span>
+      <span class="brand-mark" style="color:var(--on-orange)">@include('includes.icon', ['name' => 'cap'])</span>
       <span class="brand-name">
         <strong>EduCenter</strong>
         <small>{{ __('site.brand_sub') }}</small>
@@ -39,7 +40,11 @@
       <a class="lang-link" href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}">{{ __('site.other_lang') }}</a>
       @auth
         <span class="user-chip">{{ __('site.hi', ['name' => auth()->user()->name]) }}</span>
-        <a class="btn btn-outline btn-sm" href="{{ route('admin.index') }}">{{ __('site.dashboard') }}</a>
+        @if (auth()->user()->hasRole(\App\Models\Role::ROLE_STUDENT))
+          <a class="btn btn-outline btn-sm" href="{{ route('student.dashboard') }}">{{ __('site.my_dashboard') }}</a>
+        @else
+          <a class="btn btn-outline btn-sm" href="{{ route('admin.index') }}">{{ __('site.dashboard') }}</a>
+        @endif
         <form action="{{ route('logout') }}" method="POST" style="margin:0">
           @csrf
           <button type="submit" class="btn btn-dark btn-sm">{{ __('site.logout') }}</button>

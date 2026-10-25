@@ -1,0 +1,109 @@
+/* EduCenter design tokens (generated from the design system tokens.json) */
+:root, [data-theme="light"] {
+  --brand-navy: #14213d;
+  --brand-navy-2: #22325a;
+  --brand-orange: #f37021;
+  --brand-orange-hover: #dd5f12;
+  --on-orange: #14213d;
+  --orange-text: #c2410c;
+  --orange-soft: #fff1e6;
+  --orange-soft-ink: #9a3d06;
+  --orange-tint: #ffb27a;
+  --surface-page: #f5f6fa;
+  --surface-card: #ffffff;
+  --surface-sunken: #eef0f5;
+  --surface-inverse: #14213d;
+  --surface-footer: #0d1730;
+  --ink: #14213d;
+  --ink-muted: #3d4863;
+  --ink-subtle: #5a6478;
+  --ink-inverse: #ffffff;
+  --ink-inverse-muted: #c3cad9;
+  --line: #e3e6ee;
+  --line-strong: #8c95a8;
+  --focus: #2f5bd3;
+  --success: #1e7a4c;
+  --success-soft: #e6f4ec;
+  --danger: #a3271a;
+  --danger-soft: #fff5f3;
+  --danger-line: #f3c7c0;
+  --cat-science: #2a4c8f;
+  --cat-science-soft: #e8eef9;
+  --cat-arts: #5236b8;
+  --cat-arts-soft: #efeaff;
+  --cat-tech: #1e6b43;
+  --cat-tech-soft: #e6f4ec;
+  --shadow-tab: 0 1px 3px rgba(20,33,61,0.10);
+  --shadow-raised: 0 12px 32px rgba(20,33,61,0.08);
+}
+[data-theme="dark"] {
+  --brand-navy: #14213d;
+  --brand-navy-2: #2a3a64;
+  --brand-orange: #ff8a3d;
+  --brand-orange-hover: #ff9f5e;
+  --on-orange: #14213d;
+  --orange-text: #ffa066;
+  --orange-soft: #3a2616;
+  --orange-soft-ink: #ffc59e;
+  --orange-tint: #ffb27a;
+  --surface-page: #0e1525;
+  --surface-card: #162036;
+  --surface-sunken: #1c2740;
+  --surface-inverse: #0a1020;
+  --surface-footer: #070c18;
+  --ink: #e8ebf3;
+  --ink-muted: #b9c0d0;
+  --ink-subtle: #949db2;
+  --ink-inverse: #ffffff;
+  --ink-inverse-muted: #a9b2c6;
+  --line: #2a3654;
+  --line-strong: #5b6782;
+  --focus: #8fb0f0;
+  --success: #4cc58a;
+  --success-soft: #13301f;
+  --danger: #ff8a7a;
+  --danger-soft: #3a1a16;
+  --danger-line: #6b2a22;
+  --cat-science: #8fb0f0;
+  --cat-science-soft: #1b2a48;
+  --cat-arts: #b9a6ff;
+  --cat-arts-soft: #2a2148;
+  --cat-tech: #6fd3a0;
+  --cat-tech-soft: #14321f;
+  --shadow-tab: 0 1px 3px rgba(0,0,0,0.40);
+  --shadow-raised: 0 12px 32px rgba(0,0,0,0.45);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-18: 72px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-pill: 999px;
+  --control-sm: 38px;
+  --control-md: 44px;
+  --control-lg: 48px;
+  --container: 1200px;
+  --font-display: "Readex Pro", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+.display { font-family: var(--font-display); font-size: 50px; line-height: 1.3; font-weight: 700; }
+.h1 { font-family: var(--font-display); font-size: 40px; line-height: 1.3; font-weight: 700; }
+.h2 { font-family: var(--font-display); font-size: 32px; line-height: 1.3; font-weight: 700; }
+.h3 { font-family: var(--font-display); font-size: 22px; line-height: 1.35; font-weight: 600; }
+.h4 { font-family: var(--font-display); font-size: 19px; line-height: 1.4; font-weight: 600; }
+.stat { font-family: var(--font-display); font-size: 28px; line-height: 1.2; font-weight: 700; }
+.lead { font-family: var(--font-body); font-size: 18px; line-height: 1.8; font-weight: 400; }
+.body { font-family: var(--font-body); font-size: 16px; line-height: 1.7; font-weight: 400; }
+.label { font-family: var(--font-body); font-size: 15px; line-height: 1.4; font-weight: 600; }
+.small { font-family: var(--font-body); font-size: 14px; line-height: 1.6; font-weight: 400; }
+.caption { font-family: var(--font-body); font-size: 13px; line-height: 1.5; font-weight: 600; }

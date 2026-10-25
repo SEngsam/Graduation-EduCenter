@@ -65,10 +65,28 @@ class SiteController extends Controller
         return view('site.course', compact('courses'));
     }
 
+    public function course($id)
+    {
+        $course = Course::withCount('students')->with('teacher.category')->findOrFail($id);
+        $course->is_enrolled = $this->isEnrolled($course->id);
+
+        $related = Course::with('teacher.category')
+            ->where('id', '!=', $course->id)
+            ->when($course->teacher, function ($query) use ($course) {
+                $query->whereHas('teacher', function ($q) use ($course) {
+                    $q->where('categorie_id', $course->teacher->categorie_id);
+                });
+            })
+            ->take(3)
+            ->get();
+
+        return view('site.course-show', compact('course', 'related'));
+    }
+
     public function teachers()
     {
         $categories = Category::orderByDesc('id')->take(8)->get();
-        $teachers = Teacher::orderByDesc('id')->take(9)->get();
+        $teachers = Teacher::with(['category', 'course'])->orderByDesc('id')->take(9)->get();
         return view('site.teacher', compact('categories', 'teachers'));
     }
 
