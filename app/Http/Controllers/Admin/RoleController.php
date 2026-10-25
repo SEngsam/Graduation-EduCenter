@@ -45,7 +45,7 @@ class RoleController extends Controller
 
         $role->abilities()->attach($request->ability);
 
-        return redirect()->route('admin.roles.index');
+        return redirect()->route('admin.roles.index')->with('msg', __('dash.saved_new'));
     }
 
     /**
@@ -91,7 +91,7 @@ class RoleController extends Controller
 
         $role->abilities()->sync($request->ability);
 
-        return redirect()->route('admin.roles.index');
+        return redirect()->route('admin.roles.index')->with('msg', __('dash.saved'));
     }
 
     /**

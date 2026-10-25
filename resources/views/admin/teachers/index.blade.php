@@ -1,75 +1,78 @@
 @extends('admin.master')
 
-@section('title', 'Teachers | ' . env('APP_NAME'))
+@section('title', __('dash.teachers'))
+@section('crumbs', __('dash.teachers'))
 
 @section('content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">All Teacher</h1>
 
-    @if (session('msg'))
-    <div class="alert alert-{{ session('type') }}">
-        {{ session('msg') }}
-    </div>
-@endif
-<form method="GET" action="{{ route('admin.teachers.index') }}">
-    <div class="d-flex justify-content-end mb-3 ">
-        <select name="category_name" class="form-select w-auto" aria-label="Select Category">
-            <option value="">All Categories</option>
-            
-            @foreach($categories as $category)
-                <option value="{{ $category->name_major }}" 
-                    {{ request('category_name') == $category->name_major ? 'selected' : '' }}>
-                    {{ $category->name_major }} 
-                </option>
-            @endforeach
-        </select>
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.teachers') }}</h1>
+    <p>{{ __('dash.teachers_sub') }}</p>
+  </div>
+  @if ($me->hasAbility('add_teacher'))
+    <div class="actions"><a href="{{ route('admin.teachers.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_teacher') }}</a></div>
+  @endif
+</div>
 
-        <button type="submit" class="btn btn-primary ml-2">
-            <i class="fa fa-search"></i> Search
-        </button>
-    </div>
-</form>
+<div class="filters">
+  <form action="{{ route('admin.teachers.index') }}" method="GET">
+    <label for="category_name">{{ __('dash.category') }}</label>
+    <select id="category_name" name="category_name" onchange="this.form.submit()">
+      <option value="">{{ __('dash.all') }}</option>
+      @foreach ($categories as $category)
+        <option value="{{ $category->name_major }}" {{ request('category_name') == $category->name_major ? 'selected' : '' }}>{{ $category->name_major }}</option>
+      @endforeach
+    </select>
+    <noscript><button type="submit" class="btn btn-outline">{{ __('dash.filter') }}</button></noscript>
+  </form>
+</div>
 
-
-
-
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Major</th>
-                <th>Category Name</th>
-                {{-- <th>Created At</th> --}}
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach ($teachers as $teacher)
-                <tr>
-                    <td>{{ $teacher->id }}</td>
-                    <td><img width="80" src="{{ asset('uploads/teachers/' . $teacher->image) }}" alt=""></td>
-                    <td>{{ $teacher->name }}</td>
-                    <td>{{ $teacher->major }}</td>
-                    <td>{{ $teacher->category->name_major }}</td>
-
-
-                    <td>
-                        <a class="btn btn-sm btn-primary" href="{{ route('admin.teachers.edit', $teacher->id) }}"><i
-                                class="fas fa-edit"></i></a>
-                        <form class="d-inline" action="{{ route('admin.teachers.destroy', $teacher->id) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure')"><i
-                                    class="fas fa-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+<section class="table-box">
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ __('dash.teacher') }}</th>
+          <th>{{ __('dash.major') }}</th>
+          <th>{{ __('dash.category') }}</th>
+          <th>{{ __('dash.account') }}</th>
+          <th>{{ __('dash.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse ($teachers as $teacher)
+          @php
+            $photo = $teacher->image && file_exists(public_path('uploads/teachers/' . $teacher->image))
+                ? asset('uploads/teachers/' . $teacher->image)
+                : asset('frontend/images/teachers/teacher-' . ($teacher->id % 3 + 1) . '.jpg');
+          @endphp
+          <tr>
+            <td><span class="record"><img class="round" src="{{ $photo }}" alt="">{{ $teacher->name }}</span></td>
+            <td>{{ $teacher->major }}</td>
+            <td>
+              @if ($teacher->category && $teacher->category->name_major)
+                <span class="pill">{{ $teacher->category->name_major }}</span>
+              @else
+                <span class="muted">—</span>
+              @endif
+            </td>
+            <td class="muted">{{ optional($teacher->user)->email ?? '—' }}</td>
+            <td>
+              @include('admin.partials.row-actions', [
+                'label' => $teacher->name,
+                'edit' => $me->hasAbility('edit_teacher') ? route('admin.teachers.edit', $teacher->id) : null,
+                'destroy' => $me->hasAbility('delete_teacher') ? route('admin.teachers.destroy', $teacher->id) : null,
+              ])
+            </td>
+          </tr>
+        @empty
+          <tr><td colspan="5" class="muted" style="text-align:center">{{ __('dash.no_records') }}</td></tr>
+        @endforelse
+      </tbody>
     </table>
-    {{ $teachers->links() }}
-@stop
+  </div>
+  @include('admin.partials.table-foot', ['items' => $teachers])
+</section>
+
+@endsection

@@ -1,117 +1,137 @@
 @extends('admin.master')
 
-@section('title', 'Users | ' . env('APP_NAME'))
+@section('title', __('dash.users'))
+@section('crumbs', __('dash.users'))
 
 @section('content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">All Users</h1>
-    
-    @if (Auth::user()->hasAbility('add_user'))
-    <div class="d-flex justify-content-end">
-        <a href="{{ route('admin.users.create') }}" class="btn btn-success mb-3">
-            <i class="fas fa-user-plus"></i> Add New User
-        </a>
-    </div>
+
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.users') }}</h1>
+    <p>{{ __('dash.users_sub') }}</p>
+  </div>
+  <div class="actions">
+    <a href="{{ route('admin.roles.index') }}" class="btn btn-outline">{{ __('dash.manage_roles') }}</a>
+    @if ($me->hasAbility('add_user'))
+      <a href="{{ route('admin.users.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_user') }}</a>
     @endif
-    @if (session('msg'))
-        <div class="alert alert-{{ session('type') }}">
-            {{ session('msg') }}
-        </div>
-    @endif
+  </div>
+</div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Created At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="filters">
+  <form action="{{ route('admin.users.index') }}" method="GET">
+    <label class="sr-only" for="q">{{ __('dash.search_placeholder') }}</label>
+    <input type="search" id="q" name="q" value="{{ request('q') }}" placeholder="{{ __('dash.search_placeholder') }}">
+    <label for="filter_role">{{ __('dash.role') }}</label>
+    <select id="filter_role" name="role_id">
+      <option value="">{{ __('dash.all') }}</option>
+      @foreach ($roles as $role)
+        <option value="{{ $role->id }}" {{ request('role_id') == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+      @endforeach
+    </select>
+    <button type="submit" class="btn btn-outline">{{ __('dash.filter') }}</button>
+  </form>
+</div>
 
-            @foreach ($users as $user)
-                <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->role->name ?? 'No Role Assigned' }}</td>
-
-                    <td>{{ $user->created_at ? $user->created_at->diffForHumans() : '' }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-info" onclick="openEditModal({{ $user }})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <form class="d-inline" action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure')"><i
-                                    class="fas fa-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+<section class="table-box">
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ __('dash.user') }}</th>
+          <th>{{ __('dash.email') }}</th>
+          <th>{{ __('dash.role') }}</th>
+          <th>{{ __('dash.created_at') }}</th>
+          <th>{{ __('dash.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse ($users as $user)
+          <tr>
+            <td><span class="record"><span class="avatar" aria-hidden="true">{{ mb_substr($user->name, 0, 1) }}</span>{{ $user->name }}</span></td>
+            <td class="muted">{{ $user->email }}</td>
+            <td>
+              @if ($user->role && $user->role->name)
+                <span class="pill {{ $user->role_id == \App\Models\Role::ROLE_ADMIN ? 'strong' : '' }}">{{ $user->role->name }}</span>
+              @else
+                <span class="muted">{{ __('dash.no_role') }}</span>
+              @endif
+            </td>
+            <td class="muted">{{ optional($user->created_at)->translatedFormat('j M Y') }}</td>
+            <td>
+              <span class="row-actions">
+                @if ($me->hasAbility('edit_user'))
+                  <button type="button" class="btn btn-outline btn-sm" data-edit-user="{{ json_encode($user->only(['id', 'name', 'email', 'role_id'])) }}">{{ __('dash.edit') }}</button>
+                @endif
+                @if ($me->hasAbility('delete_user') && $user->id !== $me->id)
+                  <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" data-confirm="{{ __('dash.confirm_delete', ['name' => $user->name]) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger-soft btn-sm">{{ __('dash.delete') }}</button>
+                  </form>
+                @endif
+              </span>
+            </td>
+          </tr>
+        @empty
+          <tr><td colspan="5" class="muted" style="text-align:center">{{ __('dash.no_records') }}</td></tr>
+        @endforelse
+      </tbody>
     </table>
+  </div>
+  @include('admin.partials.table-foot', ['items' => $users])
+</section>
 
-    {{ $users->links() }}
+@if ($me->hasAbility('edit_user'))
+  <dialog class="sheet" id="editUser" aria-labelledby="editUserTitle">
+    <form method="POST" id="editUserForm">
+      @csrf
+      @method('PUT')
+      <h2 id="editUserTitle">{{ __('dash.edit_user') }}</h2>
+      <div class="field">
+        <label for="eu_name">{{ __('dash.name') }}</label>
+        <input type="text" id="eu_name" name="name" required>
+      </div>
+      <div class="field">
+        <label for="eu_email">{{ __('dash.email') }}</label>
+        <input type="email" id="eu_email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="eu_role">{{ __('dash.role') }}</label>
+        <select id="eu_role" name="role_id">
+          <option value="">{{ __('dash.no_role') }}</option>
+          @foreach ($roles as $role)
+            <option value="{{ $role->id }}">{{ $role->name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close>{{ __('dash.cancel') }}</button>
+        <button type="submit" class="btn btn-primary">{{ __('dash.save') }}</button>
+      </div>
+    </form>
+  </dialog>
+@endif
 
-    <!-- Modal -->
-    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form id="editUserForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="role_id">Role</label>
-                            <select class="form-select w-auto" id="role_id" name="role_id">
-                                <option value="">Select Role</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-@stop
+@endsection
 
 @section('scripts')
-
-    <script>
-        function openEditModal(user) {
-            $('#editUserModal #name').val(user.name);
-            $('#editUserModal #email').val(user.email);
-            $('#editUserModal #role_id').val(user.role_id);
-            $('#editUserForm').attr('action', `/admin/users/${user.id}`);
-            $('#editUserModal').modal('show');
-        }
-    </script>
+<script>
+  (function () {
+    var dialog = document.getElementById('editUser');
+    if (!dialog) return;
+    var actionTpl = @json(route('admin.users.update', '__ID__'));
+    document.querySelectorAll('[data-edit-user]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var u = JSON.parse(btn.dataset.editUser);
+        document.getElementById('editUserForm').action = actionTpl.replace('__ID__', u.id);
+        document.getElementById('eu_name').value = u.name;
+        document.getElementById('eu_email').value = u.email;
+        document.getElementById('eu_role').value = u.role_id || '';
+        dialog.showModal();
+      });
+    });
+    dialog.querySelector('[data-close]').addEventListener('click', function () { dialog.close(); });
+  })();
+</script>
 @endsection

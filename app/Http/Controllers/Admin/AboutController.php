@@ -59,7 +59,7 @@ class AboutController extends Controller
 
     ]);
 
-    return redirect()->route('admin.abouts.index')->with('msg', 'About created successfully')->with('type', 'success');
+    return redirect()->route('admin.abouts.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
 
 
 
@@ -125,7 +125,7 @@ class AboutController extends Controller
 
     ]);
 
-    return redirect()->route('admin.abouts.index')->with('msg', 'About updated successfully')->with('type', 'info');
+    return redirect()->route('admin.abouts.index')->with('msg', __('dash.saved'))->with('type', 'info');
 
 
 
@@ -145,6 +145,6 @@ class AboutController extends Controller
 
         $about->delete();
 
-        return redirect()->route('admin.abouts.index')->with('msg', 'About deleted successfully')->with('type', 'danger');
+        return redirect()->route('admin.abouts.index')->with('msg', __('dash.deleted'))->with('type', 'danger');
     }
 }

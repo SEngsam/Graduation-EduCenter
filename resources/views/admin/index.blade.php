@@ -1,271 +1,112 @@
 @extends('admin.master')
 
-
-@section('title', 'Dashboard | ' . config('app.name'))
+@section('title', __('dash.overview'))
 
 @section('content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
 
-
-
-    <!-- Earnings (Monthly) Card Example -->
-    {{-- <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Earnings (Monthly)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">${{ number_format($m_earning) }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    <!-- Earnings (Monthly) Card Example -->
-    {{-- <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                            Earnings (Annual)</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">${{ number_format($y_earning) }}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    <!-- Earnings (Monthly) Card Example -->
-    @if (
-        $user->hasAbility('all_categories') ||
-            $user->hasAbility('all_teachers') ||
-            $user->hasAbility('all_events') ||
-            $user->hasAbility('all_courses'))
-        <div class="row">
-
-
-
-            @if ($user->hasAbility('all_categories'))
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a href="{{ route('admin.categories.index') }}" class="text-decoration-none">
-                        <div class="card border-left-info shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Categories</div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $c_count }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-tags fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endif
-
-            @if ($user->hasAbility('all_teachers'))
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a href="{{ route('admin.teachers.index') }}" class="text-decoration-none">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Teachers
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $t_count }}</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endif
-            @if ($user->hasAbility('all_students'))
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a href="#" class="text-decoration-none">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Students
-                                        </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $s_count }}</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endif
-
-            @if ($user->hasAbility('all_courses'))
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a href="{{ route('admin.courses.index') }}" class="text-decoration-none">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Courses</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $co_count }}</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-book-open fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endif
-
-            @if ($user->hasAbility('all_events'))
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a href="{{ route('admin.events.index') }}" class="text-decoration-none">
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Events</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $e_count }}</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endif
-        </div>
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.overview') }}</h1>
+    <p>{{ __('dash.overview_sub') }}</p>
+  </div>
+  <div class="actions">
+    @if ($user->hasAbility('add_teacher'))
+      <a href="{{ route('admin.teachers.create') }}" class="btn btn-outline">{{ __('dash.new_teacher') }}</a>
     @endif
-    @if ($enrolledCourses->isNotEmpty())
-        <div class="card p-4 border-0 shadow-sm rounded-3 mb-5">
-            <div class="card-body">
-                <h3 class="mb-4">Your Enrolled Courses</h3>
-                <div class="row">
-                    @foreach ($enrolledCourses as $course)
-                        <div class="col-lg-4 col-sm-6 mb-4">
-                            <div class="card p-0 border-0 shadow-sm rounded-3 hover-shadow">
-                                <img class="card-img-top rounded-top" src="{{ asset('uploads/courses/' . $course->image) }}"
-                                    alt="{{ $course->title }} thumbnail" style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <ul class="list-inline mb-3">
-                                        <li class="list-inline-item">
-                                            <i class="ti-calendar me-1 text-primary"></i>
-                                            {{ $course->created_at ? $course->created_at->format('M d, Y') : 'N/A' }}
-                                        </li>
-                                    </ul>
-                                    <h4 class="card-title text-dark">{{ $course->title }}</h4>
-                                    <p class="card-text text-muted">{{ Str::limit($course->description, 100) }}</p>
-                                    <form action="{{ route('courses.removeEnrollment', $course->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Remove Enrollment</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    @elseif ($user->hasRole(Role::ROLE_STUDENT) || ($user->hasAbility('enroll_courses') && !$user->hasRole(Role::ROLE_ADMIN) ))
-        <div class="alert alert-info text-center mb-5">
-            You are not enrolled in any courses.
-        </div>
+    @if ($user->hasAbility('add_course'))
+      <a href="{{ route('admin.courses.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_course') }}</a>
     @endif
+  </div>
+</div>
 
-    @if ($teachingCourses->isNotEmpty())
-        <div class="card p-4 border-0 shadow-sm rounded-3 mb-5">
-            <div class="card-body">
-                <h3 class="mb-4 text-center">Your Teaching Courses</h3>
-                <div class="row gy-4">
-                    @foreach ($teachingCourses as $course)
-                        <div class="col-lg-4 col-md-6">
-                            <div class="card p-0 border-0 shadow-sm rounded-3">
-                                <!-- Course Image -->
-                                <img class="card-img-top rounded-top"
-                                    src="{{ asset('uploads/courses/' . $course->image) }}"
-                                    alt="{{ $course->title }} thumbnail" style="height: 200px; object-fit: cover;">
+<div class="stat-grid">
+  @if ($user->hasAbility('all_students'))
+    <div class="card stat"><span>{{ __('dash.stat_students') }}</span><strong>{{ $stats['students'] }}</strong></div>
+  @endif
+  @if ($user->hasAbility('all_courses'))
+    <a href="{{ route('admin.courses.index') }}" class="card stat"><span>{{ __('dash.stat_courses') }}</span><strong>{{ $stats['courses'] }}</strong>
+      @if ($unassigned->count())<small>{{ $unassigned->count() }} {{ __('dash.no_teacher') }}</small>@endif
+    </a>
+  @endif
+  @if ($user->hasAbility('all_teachers'))
+    <a href="{{ route('admin.teachers.index') }}" class="card stat"><span>{{ __('dash.stat_teachers') }}</span><strong>{{ $stats['teachers'] }}</strong></a>
+  @endif
+  @if ($user->hasAbility('all_categories'))
+    <a href="{{ route('admin.categories.index') }}" class="card stat"><span>{{ __('dash.stat_categories') }}</span><strong>{{ $stats['categories'] }}</strong></a>
+  @endif
+  @if ($user->hasAbility('all_events'))
+    <a href="{{ route('admin.events.index') }}" class="card stat"><span>{{ __('dash.stat_events') }}</span><strong>{{ $stats['events'] }}</strong></a>
+  @endif
+</div>
 
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <!-- Course Date -->
-                                    <ul class="list-inline mb-2">
-                                        <li class="list-inline-item">
-                                            <i class="ti-calendar me-1 text-primary"></i>
-                                            {{ $course->created_at ? $course->created_at->format('M d, Y') : 'N/A' }}
-                                        </li>
-                                    </ul>
+@if ($teachingCourses->count())
+  <section class="table-box">
+    <div class="table-foot" style="border-top:0"><strong style="color:var(--ink);font-size:18px">{{ __('dash.my_teaching') }}</strong></div>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>{{ __('dash.course') }}</th><th>{{ __('dash.students') }}</th></tr></thead>
+        <tbody>
+          @foreach ($teachingCourses as $course)
+            <tr><td><span class="record">{{ $course->title }}</span></td><td>{{ $course->students_count }}</td></tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </section>
+@endif
 
-                                    <!-- Course Title -->
-                                    <h5 class="card-title text-dark fw-bold">{{ $course->title }}</h5>
+@if ($user->hasAbility('all_courses'))
+<div class="overview-grid">
+  <section class="table-box wide">
+    <div class="table-foot" style="border-top:0">
+      <strong style="color:var(--ink);font-size:18px">{{ __('dash.recent_registrations') }}</strong>
+      <a href="{{ route('admin.courses.index') }}">{{ __('dash.view_all') }}</a>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead><tr><th>{{ __('dash.student') }}</th><th>{{ __('dash.course') }}</th><th>{{ __('dash.teacher') }}</th><th>{{ __('dash.date') }}</th></tr></thead>
+        <tbody>
+          @forelse ($registrations as $reg)
+            <tr>
+              <td><span class="record">{{ optional($reg->students)->name ?? '—' }}</span></td>
+              <td>{{ optional($reg->course)->title ?? '—' }}</td>
+              <td>{{ optional($reg->teacher)->name ?? __('dash.no_teacher') }}</td>
+              <td class="muted">{{ optional($reg->created_at)->translatedFormat('j M Y') }}</td>
+            </tr>
+          @empty
+            <tr><td colspan="4" class="muted" style="text-align:center">{{ __('dash.no_enrollments') }}</td></tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-                                    <!-- Course Description -->
-                                    <p class="card-text text-muted">
-                                        {{ Str::limit($course->description, 100) }}
-                                    </p>
+  <section class="card panel narrow">
+    <h2 style="font-size:20px">{{ __('dash.no_teacher_courses') }}</h2>
+    <p style="margin:0;color:var(--ink-subtle);font-size:14px">{{ __('dash.no_teacher_courses_sub') }}</p>
+    @forelse ($unassigned as $course)
+      <div class="todo">
+        <strong>{{ $course->title }}</strong>
+        @if ($user->hasAbility('assign_teacher'))
+          <form action="{{ route('admin.courses.assignTeacher') }}" method="POST">
+            @csrf
+            <input type="hidden" name="course_id" value="{{ $course->id }}">
+            <label class="sr-only" for="t{{ $course->id }}">{{ __('dash.teacher') }}</label>
+            <select id="t{{ $course->id }}" name="teacher_id" required>
+              <option value="">{{ __('dash.choose_teacher') }}</option>
+              @foreach ($teachers as $t)
+                <option value="{{ $t->id }}">{{ $t->name }}</option>
+              @endforeach
+            </select>
+            <button type="submit" class="btn btn-dark btn-sm">{{ __('dash.assign') }}</button>
+          </form>
+        @endif
+      </div>
+    @empty
+      <p class="pill">{{ __('dash.all_set') }}</p>
+    @endforelse
+  </section>
+</div>
+@endif
 
-                                    <!-- Action Button -->
-                                    <button class="btn btn-secondary btn-sm w-100">You teach it!</button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    @elseif($user->role_id == Role::ROLE_TEACHER)
-        <div class="alert alert-info text-center mb-5">
-            You are not teaching any courses.
-        </div>
-    @endif
-
-
-
-
-
-
-
-    {{-- <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Major</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$m_count}}</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-heart fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-@stop
+@endsection

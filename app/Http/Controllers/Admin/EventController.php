@@ -57,7 +57,7 @@ class EventController extends Controller
 
     ]);
 
-    return redirect()->route('admin.events.index')->with('msg', 'Events created successfully')->with('type', 'success');
+    return redirect()->route('admin.events.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
 
 
 
@@ -119,7 +119,7 @@ class EventController extends Controller
 
     ]);
 
-    return redirect()->route('admin.events.index')->with('msg', 'Event updated successfully')->with('type', 'info');
+    return redirect()->route('admin.events.index')->with('msg', __('dash.saved'))->with('type', 'info');
 
 
 
@@ -138,7 +138,7 @@ class EventController extends Controller
 
         $event->delete();
 
-        return redirect()->route('admin.events.index')->with('msg', 'Event deleted successfully')->with('type', 'danger');
+        return redirect()->route('admin.events.index')->with('msg', __('dash.deleted'))->with('type', 'danger');
     }
 
 

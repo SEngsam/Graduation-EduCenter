@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Role;
 use App\Models\Teacher;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -74,6 +75,7 @@ class TeacherController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role_id' => Role::ROLE_TEACHER,
             ]);
             Teacher::create([
                 'image' => $img_name,
@@ -84,10 +86,10 @@ class TeacherController extends Controller
 
             ]);
             DB::commit();
-            return redirect()->route('admin.teachers.index')->with('msg', 'Category created successfully')->with('type', 'success');
+            return redirect()->route('admin.teachers.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
         } catch (\Exception $exp) {
             DB::rollBack();
-            return redirect()->back()->with('msg','Something Error!,Try Agin Later');
+            return redirect()->back()->with('msg', __('dash.went_wrong'));
         }
     
        
@@ -150,7 +152,7 @@ class TeacherController extends Controller
 
         ]);
 
-        return redirect()->route('admin.teachers.index')->with('msg', 'Teacher updated successfully')->with('type', 'info');
+        return redirect()->route('admin.teachers.index')->with('msg', __('dash.saved'))->with('type', 'info');
     }
 
     /**
@@ -163,7 +165,7 @@ class TeacherController extends Controller
     {
         $courses = Course::where('teacher_id', $id)->first();
         if ($courses) {
-            return redirect()->back()->with('msg', 'Teacher Cant Delete Because Find In Courses')->with('type', 'danger');
+            return redirect()->back()->with('msg', __('dash.teacher_in_use'))->with('type', 'danger');
         }
         $teacher = Teacher::findOrFail($id);
 
@@ -171,6 +173,6 @@ class TeacherController extends Controller
 
         $teacher->delete();
 
-        return redirect()->route('admin.teachers.index')->with('msg', 'Teacher deleted successfully')->with('type', 'success');
+        return redirect()->route('admin.teachers.index')->with('msg', __('dash.deleted'))->with('type', 'success');
     }
 }

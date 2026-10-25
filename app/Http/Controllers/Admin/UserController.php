@@ -13,7 +13,17 @@ class UserController extends Controller
     public function index()
     {
         $data = [];
-        $data['users'] = User::orderByDesc('id')->paginate(5);
+        $data['users'] = User::with('role')
+            ->when(request('role_id'), function ($query, $roleId) {
+                $query->where('role_id', $roleId);
+            })
+            ->when(request('q'), function ($query, $q) {
+                $query->where(function ($w) use ($q) {
+                    $w->where('name', 'like', "%{$q}%")->orWhere('email', 'like', "%{$q}%");
+                });
+            })
+            ->orderByDesc('id')
+            ->paginate(10);
         $data['roles'] = Role::all();
         
         return view('admin.users.index',$data);
@@ -41,7 +51,7 @@ public function store(Request $request)
         'role_id' => $request->role_id,
     ]);
 
-    return redirect()->route('admin.users.index')->with('msg', 'User created successfully!')->with('type', 'success');
+    return redirect()->route('admin.users.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
 }
 
     public function update(Request $request, $id)
@@ -49,13 +59,13 @@ public function store(Request $request)
        
         $user = User::findOrFail($id);
         $user->update($request->only('name', 'email', 'role_id'));
-        return back()->with('msg', 'User updated successfully')->with('type', 'success');
+        return back()->with('msg', __('dash.saved'))->with('type', 'success');
     }
 
     public function destroy($id)
     {
         User::destroy($id);
 
-        return redirect()->route('admin.users.index')->with('msg', 'User deleted successfully')->with('type', 'danger');
+        return redirect()->route('admin.users.index')->with('msg', __('dash.deleted'))->with('type', 'danger');
     }
 }

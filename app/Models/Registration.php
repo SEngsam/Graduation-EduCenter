@@ -14,7 +14,7 @@ class Registration extends Model
 
      public function students()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function teacher()

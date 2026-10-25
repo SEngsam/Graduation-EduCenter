@@ -1,50 +1,55 @@
 @extends('admin.master')
 
-@section('title', 'News | ' . env('APP_NAME'))
+@section('title', __('dash.news'))
+@section('crumbs', __('dash.news'))
 
 @section('content')
-<!-- Page Heading -->
-<h1 class="h3 mb-4 text-gray-800">All News</h1>
 
-<table class="table table-bordered">
-    <thead>
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.news') }}</h1>
+    <p>{{ __('dash.news_sub') }}</p>
+  </div>
+  <div class="actions"><a href="{{ route('admin.news.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_news') }}</a></div>
+</div>
+
+<section class="table-box">
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
         <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Date</th>
-            <th>Auther</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>btn_text</th>
-            <th>btn_link</th>
-            <th>Actions</th>
+          <th>{{ __('dash.post') }}</th>
+          <th>{{ __('dash.author') }}</th>
+          <th>{{ __('dash.date') }}</th>
+          <th>{{ __('dash.actions') }}</th>
         </tr>
-    </thead>
-    <tbody>
-
-        @foreach ($n as $news)
-        <tr>
-            <td>{{$news->id}}</td>
-            <td><img width="80" src="{{ asset('uploads/news/'.$news->image) }}" alt=""></td>
-            <td>{{ $news->date}}</td>
-            <td>{{ $news->auther}}</td>
-            <td>{{ $news->title}}</td>
-            <td>{{ $news->description}}</td>
-            <td>{{$news->btn_text}}</td>
-            <td>{{$news->btn_link}}</td>
-
-
+      </thead>
+      <tbody>
+        @forelse ($n as $post)
+          @php
+            $photo = $post->image && file_exists(public_path('uploads/news/' . $post->image))
+                ? asset('uploads/news/' . $post->image)
+                : asset('frontend/images/blog/post-' . ($post->id % 3 + 1) . '.jpg');
+          @endphp
+          <tr>
+            <td><span class="record"><img src="{{ $photo }}" alt="">{{ $post->title }}</span></td>
+            <td>{{ $post->auther }}</td>
+            <td class="muted">{{ $post->date }}</td>
             <td>
-                <a class="btn btn-sm btn-primary" href="{{ route('admin.news.edit', $news->id) }}"><i class="fas fa-edit"></i></a>
-                <form class="d-inline" action="{{ route('admin.news.destroy', $news->id) }}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-trash"></i></button>
-                </form>
+              @include('admin.partials.row-actions', [
+                'label' => $post->title,
+                'edit' => route('admin.news.edit', $post->id),
+                'destroy' => route('admin.news.destroy', $post->id),
+              ])
             </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-{{ $n->links() }}
-@stop
+          </tr>
+        @empty
+          <tr><td colspan="4" class="muted" style="text-align:center">{{ __('dash.no_records') }}</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+  @include('admin.partials.table-foot', ['items' => $n])
+</section>
+
+@endsection

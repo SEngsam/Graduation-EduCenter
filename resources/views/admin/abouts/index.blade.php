@@ -1,46 +1,55 @@
 @extends('admin.master')
 
-@section('title', 'Abouts | ' . env('APP_NAME'))
+@section('title', __('dash.abouts'))
+@section('crumbs', __('dash.abouts'))
 
 @section('content')
-<!-- Page Heading -->
-<h1 class="h3 mb-4 text-gray-800">All About</h1>
 
-<table class="table table-bordered">
-    <thead>
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.abouts') }}</h1>
+    <p>{{ __('dash.abouts_sub') }}</p>
+  </div>
+  <div class="actions"><a href="{{ route('admin.abouts.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_about') }}</a></div>
+</div>
+
+<section class="table-box">
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
         <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>btn_text</th>
-            <th>btn_link</th>
-            <th>Actions</th>
+          <th>{{ __('dash.title') }}</th>
+          <th>{{ __('dash.description') }}</th>
+          <th>{{ __('dash.btn_text') }}</th>
+          <th>{{ __('dash.actions') }}</th>
         </tr>
-    </thead>
-    <tbody>
-
-        @foreach ($abouts as $about)
-        <tr>
-            <td>{{ $about->id}}</td>
-            <td style="text-align: center">{{ $about->title}}</td>
-            <td><img width="80" src="{{ asset('uploads/abouts/'.$about->image) }}" alt=""></td>
-            <td>{{ $about->description}}</td>
-            <td>{{ $about->btn_text}}</td>
-            <td>{{ $about->btn_link}}</td>
-
-
+      </thead>
+      <tbody>
+        @forelse ($abouts as $about)
+          @php
+            $photo = $about->image && file_exists(public_path('uploads/abouts/' . $about->image))
+                ? asset('uploads/abouts/' . $about->image)
+                : asset('frontend/images/about/about-us.jpg');
+          @endphp
+          <tr>
+            <td><span class="record"><img src="{{ $photo }}" alt="">{{ $about->title }}</span></td>
+            <td class="muted clip">{{ $about->description }}</td>
+            <td>{{ $about->btn_text }}</td>
             <td>
-                <a class="btn btn-sm btn-primary" href="{{ route('admin.abouts.edit', $about->id) }}"><i class="fas fa-edit"></i></a>
-                <form class="d-inline" action="{{ route('admin.abouts.destroy', $about->id) }}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-trash"></i></button>
-                </form>
+              @include('admin.partials.row-actions', [
+                'label' => $about->title,
+                'edit' => route('admin.abouts.edit', $about->id),
+                'destroy' => route('admin.abouts.destroy', $about->id),
+              ])
             </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-  {{ $abouts->links() }}
-@stop
+          </tr>
+        @empty
+          <tr><td colspan="4" class="muted" style="text-align:center">{{ __('dash.no_records') }}</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+  @include('admin.partials.table-foot', ['items' => $abouts])
+</section>
+
+@endsection

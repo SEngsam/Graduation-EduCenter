@@ -1,124 +1,120 @@
 @extends('admin.master')
 
-@section('title', 'Courses | ' . env('APP_NAME'))
-
+@section('title', __('dash.courses'))
+@section('crumbs', __('dash.courses'))
 
 @section('content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">All Courses</h1>
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.courses') }}</h1>
+    <p>{{ __('dash.courses_sub') }}</p>
+  </div>
+  @if ($user->hasAbility('add_course'))
+    <div class="actions"><a href="{{ route('admin.courses.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_course') }}</a></div>
+  @endif
+</div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>btn_text</th>
-                <th>btn_link</th>
-                <th>Teacher</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($courses as $course)
-                <tr>
-                    <td>{{ $course->id }}</td>
-                    <td><img width="80" src="{{ asset('uploads/courses/' . $course->image) }}" alt=""></td>
-                    <td>{{ $course->title }}</td>
-                    <td>{{ $course->description }}</td>
-                    <td>{{ $course->btn_text }}</td>
-                    <td>{{ $course->btn_link }}</td>
-                    <td>{{ $course->teacher->name ?? 'Not Assigned!' }}</td>
-                    <td class="w-auto">
-                        <a class="btn btn-sm btn-primary" href="{{ route('admin.courses.edit', $course->id) }}"><i class="fas fa-edit"></i></a>
-                        <form class="d-inline" action="{{ route('admin.courses.destroy', $course->id) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></button>
-                        </form>
-                        @if ($user->hasAbility('assign_teacher') )
+<div class="filters">
+  <form action="{{ route('admin.courses.index') }}" method="GET">
+    <label class="sr-only" for="q">{{ __('dash.search_placeholder') }}</label>
+    <input type="search" id="q" name="q" value="{{ request('q') }}" placeholder="{{ __('dash.search_placeholder') }}">
+    <button type="submit" class="btn btn-outline">{{ __('dash.filter') }}</button>
+  </form>
+</div>
 
-                        <button class="btn btn-sm btn-success" onclick="assignTeacher('{{ $course->title }}', {{ $course->id }}, {{ $course->teacher_id }})">
-                            <i class="fas fa-chalkboard-teacher"></i>Assign
-                        </button>
-                        @endif
-                    </td>
-                </tr>
-            @empty
-            <td colspan="8" class="text-center">No records found</td>
-
-            @endforelse
-        </tbody>
+<section class="table-box">
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ __('dash.course') }}</th>
+          <th>{{ __('dash.category') }}</th>
+          <th>{{ __('dash.teacher') }}</th>
+          <th>{{ __('dash.students') }}</th>
+          <th>{{ __('dash.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse ($courses as $course)
+          @php
+            $photo = $course->image && file_exists(public_path('uploads/courses/' . $course->image))
+                ? asset('uploads/courses/' . $course->image)
+                : asset('frontend/images/courses/course-' . ($course->id % 6 + 1) . '.jpg');
+          @endphp
+          <tr>
+            <td><span class="record"><img src="{{ $photo }}" alt="">{{ $course->title }}</span></td>
+            <td class="muted">{{ optional(optional($course->teacher)->category)->name_major ?? '—' }}</td>
+            <td>
+              @if ($course->teacher)
+                {{ $course->teacher->name }}
+                @if ($user->hasAbility('assign_teacher'))
+                  <button type="button" class="missing" style="border:0;padding:2px 6px" data-assign="{{ $course->id }}" data-title="{{ $course->title }}" data-teacher="{{ $course->teacher_id }}">{{ __('dash.edit') }}</button>
+                @endif
+              @elseif ($user->hasAbility('assign_teacher'))
+                <button type="button" class="missing" data-assign="{{ $course->id }}" data-title="{{ $course->title }}">+ {{ __('dash.assign_teacher') }}</button>
+              @else
+                <span class="muted">{{ __('dash.no_teacher') }}</span>
+              @endif
+            </td>
+            <td>{{ $course->students_count }}</td>
+            <td>
+              @include('admin.partials.row-actions', [
+                'label' => $course->title,
+                'edit' => $user->hasAbility('edit_course') ? route('admin.courses.edit', $course->id) : null,
+                'destroy' => $user->hasAbility('delete_course') ? route('admin.courses.destroy', $course->id) : null,
+              ])
+            </td>
+          </tr>
+        @empty
+          <tr><td colspan="5" class="muted" style="text-align:center">{{ __('dash.no_records') }}</td></tr>
+        @endforelse
+      </tbody>
     </table>
+  </div>
+  @include('admin.partials.table-foot', ['items' => $courses])
+</section>
 
-    <!-- Pagination Links -->
-    <div class="mt-3">
-        {{ $courses->links() }}
-    </div>
+@if ($user->hasAbility('assign_teacher'))
+  <dialog class="sheet" id="assignDialog" aria-labelledby="assignTitle">
+    <form action="{{ route('admin.courses.assignTeacher') }}" method="POST">
+      @csrf
+      <h2 id="assignTitle">{{ __('dash.assign_teacher') }}</h2>
+      <input type="hidden" name="course_id" id="assign_course">
+      <div class="field">
+        <label for="assign_teacher">{{ __('dash.teacher') }}</label>
+        <select name="teacher_id" id="assign_teacher" required>
+          <option value="">{{ __('dash.choose_teacher') }}</option>
+          @foreach ($teachers as $teacher)
+            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" data-close>{{ __('dash.cancel') }}</button>
+        <button type="submit" class="btn btn-primary">{{ __('dash.assign') }}</button>
+      </div>
+    </form>
+  </dialog>
+@endif
 
-    <!-- Modal for Assigning Teacher -->
-    <div class="modal fade" id="assignTeacherModal" tabindex="-1" aria-labelledby="assignTeacherModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="assignTeacherModalLabel">Assign Teacher to Course</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="assignTeacherForm" action="{{ route('admin.courses.assignTeacher') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <input type="hidden" name="course_id" id="course_id">
-                        <div class="mb-3">
-                            <label for="teacher_id" class="form-label">Select Teacher</label>
-                            <select name="teacher_id" id="teacher_id" class="form-select">
-                                <option value="">Choose a Teacher</option>
-                                @foreach ($teachers as $teacher)
-                                    <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Assign</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-@stop
+@endsection
 
 @section('scripts')
-    <script>
-        // Function to set course name, course id, and teacher info in modal
-        function assignTeacher(courseName, courseId, currentTeacherId) {
-            // Set course id in the hidden input field
-            document.getElementById('course_id').value = courseId;
-
-            // Set course name in the modal title
-            document.getElementById('assignTeacherModalLabel').innerText = 'Assign Teacher to ' + courseName;
-
-            // Set teacher id in the select dropdown (if exists)
-            document.getElementById('teacher_id').value = currentTeacherId || '';
-            
-            // Show the modal
-            var assignTeacherModal = new bootstrap.Modal(document.getElementById('assignTeacherModal'));
-            assignTeacherModal.show();
-        }
-    </script>
+<script>
+  (function () {
+    var dialog = document.getElementById('assignDialog');
+    if (!dialog) return;
+    var titleTpl = @json(__('dash.assign_teacher_to', ['name' => '__NAME__']));
+    document.querySelectorAll('[data-assign]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.getElementById('assign_course').value = btn.dataset.assign;
+        document.getElementById('assign_teacher').value = btn.dataset.teacher || '';
+        document.getElementById('assignTitle').textContent = titleTpl.replace('__NAME__', btn.dataset.title);
+        dialog.showModal();
+      });
+    });
+    dialog.querySelector('[data-close]').addEventListener('click', function () { dialog.close(); });
+  })();
+</script>
 @endsection

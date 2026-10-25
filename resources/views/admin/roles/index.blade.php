@@ -1,53 +1,50 @@
 @extends('admin.master')
 
-@section('title', 'Dashboard | Admin')
-
-@section('styles')
-
-<style>
-    .table th,
-    .table td {
-        vertical-align: middle
-    }
-</style>
-
-@stop
+@section('title', __('dash.roles'))
+@section('crumbs', __('dash.roles'))
 
 @section('content')
-<!-- Page Heading -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 text-gray-800">All Roles</h1>
-    <a class="btn btn-success w-25" href="{{ route('admin.roles.create') }}">Add New</a>
+
+<div class="admin-title">
+  <div>
+    <h1>{{ __('dash.roles') }}</h1>
+    <p>{{ __('dash.roles_sub') }}</p>
+  </div>
+  <div class="actions"><a href="{{ route('admin.roles.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_role') }}</a></div>
 </div>
 
-@if (session('msg'))
-    <div class="alert alert-{{ session('type') }}">
-        {{ session('msg') }}
-    </div>
-@endif
+<section class="table-box">
+  <div class="table-scroll">
+    <table class="data-table" style="min-width:520px">
+      <thead>
+        <tr>
+          <th>{{ __('dash.role') }}</th>
+          <th>{{ __('dash.abilities') }}</th>
+          <th>{{ __('dash.users') }}</th>
+          <th>{{ __('dash.actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse ($roles as $role)
+          <tr>
+            <td><span class="record">{{ $role->name }}</span></td>
+            <td class="muted">{{ __('dash.abilities_count', ['count' => $role->abilities->count()]) }}</td>
+            <td class="muted">{{ \App\Models\User::where('role_id', $role->id)->count() }}</td>
+            <td>
+              @include('admin.partials.row-actions', [
+                'label' => $role->name,
+                'edit' => route('admin.roles.edit', $role->id),
+                'destroy' => $role->id == \App\Models\Role::ROLE_ADMIN ? null : route('admin.roles.destroy', $role->id),
+              ])
+            </td>
+          </tr>
+        @empty
+          <tr><td colspan="4" class="muted" style="text-align:center">{{ __('dash.no_records') }}</td></tr>
+        @endforelse
+      </tbody>
+    </table>
+  </div>
+  @include('admin.partials.table-foot', ['items' => $roles])
+</section>
 
-<table class="table table-bordered table-striped table-hover">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
-    @foreach ($roles as $role)
-    <tr>
-        <td>{{ $role->id }}</td>
-        <td>{{ $role->name }}</td>
-
-        <td>
-            <a class="btn btn-sm btn-primary" href="{{ route('admin.roles.edit', $role->id) }}"><i class="fas fa-edit"></i></a>
-            <form class="d-inline" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST">
-                @csrf
-                @method('delete')
-                <button onclick="return confirm('Are you sure?!')" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-
-</table>
-{{ $roles->links() }}
-@stop
+@endsection

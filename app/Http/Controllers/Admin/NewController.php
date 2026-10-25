@@ -61,7 +61,7 @@ class NewController extends Controller
 
     ]);
 
-    return redirect()->route('admin.news.index')->with('msg', 'News created successfully')->with('type', 'success');
+    return redirect()->route('admin.news.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
 
 
 
@@ -132,7 +132,7 @@ class NewController extends Controller
 
     ]);
 
-    return redirect()->route('admin.news.index')->with('msg', 'New updated successfully')->with('type', 'info');
+    return redirect()->route('admin.news.index')->with('msg', __('dash.saved'))->with('type', 'info');
 
 
 
@@ -151,6 +151,6 @@ class NewController extends Controller
 
         $new->delete();
 
-        return redirect()->route('admin.news.index')->with('msg', 'New deleted successfully')->with('type', 'danger');
+        return redirect()->route('admin.news.index')->with('msg', __('dash.deleted'))->with('type', 'danger');
     }
 }

@@ -25,7 +25,12 @@ class CourseController extends Controller
     {
         Gate::authorize('all_courses');
         $user = Auth::user();
-        $courses = Course::with('teacher')->CreatedBy()->withCount('students')->orderByDesc('id')->paginate(5);
+        $courses = Course::with('teacher.category')->CreatedBy()->withCount('students')
+            ->when(request('q'), function ($query, $q) {
+                $query->where('title', 'like', "%{$q}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(10);
         $teachers = Teacher::all();
         return view('admin.courses.index', compact('courses', 'teachers','user'));
     }
@@ -57,7 +62,7 @@ class CourseController extends Controller
             'description' => 'required',
             'btn_text' => 'required',
             'btn_link' => 'required',
-            // 'registration_id' => 'required',
+            'teacher_id' => ['nullable', 'integer', Rule::exists('teachers', 'id')],
         ]);
         $data = [];
         $user =Auth::user()->load('teacher');
@@ -76,11 +81,13 @@ class CourseController extends Controller
      
         if($user->hasRole(Role::ROLE_TEACHER)){
             $data['teacher_id'] = $user->teacher->id;
+        } elseif ($request->filled('teacher_id')) {
+            $data['teacher_id'] = $request->teacher_id;
         }
        
         Course::create($data);
 
-        return redirect()->route('admin.courses.index')->with('msg', 'Course created successfully')->with('type', 'success');
+        return redirect()->route('admin.courses.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
     }
 
     /**
@@ -123,7 +130,7 @@ class CourseController extends Controller
             'btn_text' => 'required',
             'btn_link' => 'required',
             //  'registration_id' => 'required',
-            'teacher_id' => 'required',
+            'teacher_id' => ['nullable', 'integer', Rule::exists('teachers', 'id')],
         ]);
 
         $courses = Course::findOrFail($id);
@@ -147,7 +154,7 @@ class CourseController extends Controller
         ]);
 
         // Redirect
-        return redirect()->route('admin.courses.index')->with('msg', 'Courses updated successfully')->with('type', 'info');
+        return redirect()->route('admin.courses.index')->with('msg', __('dash.saved'))->with('type', 'info');
     }
 
     /**
@@ -161,7 +168,7 @@ class CourseController extends Controller
         $course = Course::findOrFail($id);
         File::delete(public_path('uploads/courses/' . $course->image));
         $course->delete();
-        return redirect()->back()->with('msg', 'Course deleted successfully')->with('type', 'danger');
+        return redirect()->back()->with('msg', __('dash.deleted'))->with('type', 'danger');
     }
     public function enroll($course_id)
     {
@@ -220,8 +227,8 @@ class CourseController extends Controller
     public function assignTeacher(Request $request)
     {
         $request->validate([
-            'teacher_id' => ['required','int',  Rule::exists('teachers', 'id')],
-            'course_id' => ['required','int',  Rule::exists('courses', 'id')],
+            'teacher_id' => ['required', 'integer', Rule::exists('teachers', 'id')],
+            'course_id' => ['required', 'integer', Rule::exists('courses', 'id')],
         ]);
         $course = Course::find($request->course_id);
 
@@ -229,7 +236,7 @@ class CourseController extends Controller
             $course->teacher_id = $request->teacher_id;
             $course->save();
 
-            return redirect()->route('admin.courses.index')->with('success', 'Teacher assigned successfully!');
+            return redirect()->back()->with('success', __('dash.teacher_assigned'));
         }
 
         return redirect()->route('admin.courses.index')->with('error', __('site.msg_course_missing'));

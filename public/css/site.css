@@ -775,3 +775,22 @@ h1, h2, h3, h4 {
 .form-card { padding: 28px; }
 .form-card h2 { font-size: 20px; }
 .form-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* bootstrap pagination markup (Paginator::useBootstrap) */
+.pagination { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.page-link {
+  display: inline-flex;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 12px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--ink);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.page-item.active .page-link { background: var(--brand-navy); border-color: var(--brand-navy); color: var(--ink-inverse); font-weight: 600; }
+.page-item.disabled .page-link { color: var(--ink-subtle); }

@@ -98,7 +98,7 @@ class CategoryController extends Controller
         event(new Category1Notification($request->name_major));
 
         // Redirect
-        return redirect()->route('admin.categories.index')->with('msg', 'Category created successfully')->with('type', 'success');
+        return redirect()->route('admin.categories.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
     }
 
     /**
@@ -165,7 +165,7 @@ class CategoryController extends Controller
         ]);
 
         // Redirect
-        return redirect()->route('admin.categories.index')->with('msg', 'Category updated successfully')->with('type', 'info');
+        return redirect()->route('admin.categories.index')->with('msg', __('dash.saved'))->with('type', 'info');
 
     }
 
@@ -180,7 +180,7 @@ class CategoryController extends Controller
         $teachers = Teacher::where('categorie_id',$id)->first();
         if($teachers)
         {
-            return redirect()->back()->with('msg', 'Category Cant Deleted Because Teacher Use This Category')->with('type', 'danger');
+            return redirect()->back()->with('msg', __('dash.category_in_use'))->with('type', 'danger');
         }
 
         $category = Category::findOrFail($id);
@@ -190,6 +190,6 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('admin.categories.index')->with('msg', 'Category deleted successfully')->with('type', 'success');
+        return redirect()->route('admin.categories.index')->with('msg', __('dash.deleted'))->with('type', 'success');
     }
 }
