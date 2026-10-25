@@ -26,7 +26,7 @@
       @endisset
     </div>
 
-    <div class="hero-panel" aria-hidden="true">
+    <div class="hero-panel" aria-hidden="true" style="background-image: linear-gradient(rgba(20, 33, 61, .78), rgba(20, 33, 61, .9)), url({{ asset('frontend/images/banner/banner-1.jpg') }})">
       @if ($first = $courses->first())
         <div class="panel-card">
           <small>{{ __('site.today_class') }}</small>
@@ -108,7 +108,7 @@
         @if ($item->image && file_exists(public_path('uploads/abouts/' . $item->image)))
           <img src="{{ asset('uploads/abouts/' . $item->image) }}" alt="">
         @else
-          <span style="color:#a8e3d9">@include('includes.icon', ['name' => 'book', 'size' => 96, 'stroke' => 1.4])</span>
+          <img src="{{ asset('frontend/images/about/about-us.jpg') }}" alt="">
         @endif
       </div>
       <div class="about-text">

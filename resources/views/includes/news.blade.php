@@ -1,10 +1,11 @@
+@php
+    $photo = $item->image && file_exists(public_path('uploads/news/' . $item->image))
+        ? asset('uploads/news/' . $item->image)
+        : asset('frontend/images/blog/post-' . ($item->id % 3 + 1) . '.jpg');
+@endphp
 <article class="card news-row">
   <div class="thumb">
-    @if ($item->image && file_exists(public_path('uploads/news/' . $item->image)))
-      <img src="{{ asset('uploads/news/' . $item->image) }}" alt="">
-    @else
-      @include('includes.icon', ['name' => 'news', 'size' => 32, 'stroke' => 1.8])
-    @endif
+    <img src="{{ $photo }}" alt="">
   </div>
   <div>
     <small>{{ $item->date }}@if ($item->auther) · {{ $item->auther }}@endif</small>

@@ -3,15 +3,12 @@
     $major = strtolower(optional(optional($item->teacher)->category)->name_major ?? '');
     [$tone, $icon] = $tones[$major] ?? ['', 'book'];
     $hasImage = $item->image && file_exists(public_path('uploads/courses/' . $item->image));
+    $photo = $hasImage ? asset('uploads/courses/' . $item->image) : asset('frontend/images/courses/course-' . ($item->id % 6 + 1) . '.jpg');
     $enrolled = $item->is_enrolled ?? false;
 @endphp
 <article class="card course-card {{ $enrolled ? 'is-enrolled' : '' }}">
   <div class="thumb {{ $tone ? 'tone-' . $tone : '' }}">
-    @if ($hasImage)
-      <img src="{{ asset('uploads/courses/' . $item->image) }}" alt="">
-    @else
-      @include('includes.icon', ['name' => $icon, 'size' => 52, 'stroke' => 1.6])
-    @endif
+    <img src="{{ $photo }}" alt="">
     @if ($enrolled)
       <span class="flag">{{ __('site.enrolled') }}</span>
     @endif
@@ -27,7 +24,7 @@
         @if ($item->teacher->image && file_exists(public_path('uploads/teachers/' . $item->teacher->image)))
           <img class="avatar" src="{{ asset('uploads/teachers/' . $item->teacher->image) }}" alt="">
         @else
-          <span class="avatar" aria-hidden="true">{{ mb_substr($item->teacher->name, 0, 1) }}</span>
+          <img class="avatar" src="{{ asset('frontend/images/teachers/teacher-' . ($item->teacher->id % 3 + 1) . '.jpg') }}" alt="">
         @endif
         <span class="teacher">{{ $item->teacher->name }}</span>
       @else

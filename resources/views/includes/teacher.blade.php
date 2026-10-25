@@ -1,9 +1,10 @@
+@php
+    $photo = $item->image && file_exists(public_path('uploads/teachers/' . $item->image))
+        ? asset('uploads/teachers/' . $item->image)
+        : asset('frontend/images/teachers/teacher-' . ($item->id % 3 + 1) . '.jpg');
+@endphp
 <div class="card teacher-card" data-category="{{ $item->categorie_id }}">
-  @if ($item->image && file_exists(public_path('uploads/teachers/' . $item->image)))
-    <img class="avatar" src="{{ asset('uploads/teachers/' . $item->image) }}" alt="">
-  @else
-    <span class="avatar" aria-hidden="true">{{ mb_substr($item->name, 0, 1) }}</span>
-  @endif
+  <img class="avatar" src="{{ $photo }}" alt="">
   <h3>{{ $item->name }}</h3>
   <p>{{ $item->major }}</p>
 </div>

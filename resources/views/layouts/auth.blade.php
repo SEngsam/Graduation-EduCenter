@@ -13,7 +13,7 @@
 <div class="auth">
   <aside class="auth-side">
     <a class="brand" href="{{ route('site.index') }}">
-      <span class="brand-mark" style="color:#fff">@include('includes.icon', ['name' => 'cap'])</span>
+      <span class="brand-mark" style="color:#14213d">@include('includes.icon', ['name' => 'cap'])</span>
       <span class="brand-name">
         <strong>EduCenter</strong>
         <small>{{ __('site.brand_sub') }}</small>
@@ -23,7 +23,7 @@
       <h1>@yield('side_title')</h1>
       <p>@yield('side_text')</p>
     </div>
-    <a href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}" style="color:#c4d9d5">{{ __('site.other_lang') }}</a>
+    <a href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}" style="color:#c3cad9">{{ __('site.other_lang') }}</a>
   </aside>
   <main class="auth-main">
     @yield('content')

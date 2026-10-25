@@ -15,7 +15,7 @@
 <header class="site-header" id="siteHeader">
   <div class="container">
     <a class="brand" href="{{ route('site.index') }}">
-      <span class="brand-mark" style="color:#fff">@include('includes.icon', ['name' => 'cap'])</span>
+      <span class="brand-mark" style="color:#14213d">@include('includes.icon', ['name' => 'cap'])</span>
       <span class="brand-name">
         <strong>EduCenter</strong>
         <small>{{ __('site.brand_sub') }}</small>

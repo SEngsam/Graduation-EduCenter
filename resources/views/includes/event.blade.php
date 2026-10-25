@@ -1,10 +1,11 @@
+@php
+    $photo = $item->image && file_exists(public_path('uploads/events/' . $item->image))
+        ? asset('uploads/events/' . $item->image)
+        : asset('frontend/images/events/event-' . ($item->id % 3 + 1) . '.jpg');
+@endphp
 <article class="card event-card">
   <div class="thumb">
-    @if ($item->image && file_exists(public_path('uploads/events/' . $item->image)))
-      <img src="{{ asset('uploads/events/' . $item->image) }}" alt="">
-    @else
-      @include('includes.icon', ['name' => 'pin', 'size' => 44, 'stroke' => 1.6])
-    @endif
+    <img src="{{ $photo }}" alt="">
   </div>
   <div class="course-body">
     <div class="course-meta">

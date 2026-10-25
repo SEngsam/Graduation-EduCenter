@@ -14,7 +14,7 @@
         @if ($item->image && file_exists(public_path('uploads/abouts/' . $item->image)))
           <img src="{{ asset('uploads/abouts/' . $item->image) }}" alt="">
         @else
-          <span style="color:#a8e3d9">@include('includes.icon', ['name' => 'book', 'size' => 96, 'stroke' => 1.4])</span>
+          <img src="{{ asset('frontend/images/about/about-page.jpg') }}" alt="">
         @endif
       </div>
       <div class="about-text">
