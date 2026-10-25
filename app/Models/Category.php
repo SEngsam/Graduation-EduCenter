@@ -7,12 +7,12 @@ namespace App\Models;
 use App\Scopes\UserAddedScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\softDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 //use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Category extends Model
 {
-    use HasFactory,softDeletes;
+    use HasFactory,SoftDeletes;
      //protected $guarded = [];
      protected $fillable = ['name_major', 'image','title','description'];
 

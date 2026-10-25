@@ -6,12 +6,12 @@ use App\Scopes\UserAddedScope;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\softDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 
 class Teacher extends Model
 {
-    use HasFactory, softDeletes;
+    use HasFactory, SoftDeletes;
     protected $guarded = [];
 
 
