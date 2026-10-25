@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\About;
 use App\Models\Event;
 use App\Models\Course;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -17,7 +18,9 @@ class SiteController extends Controller
         $courses_slider = Course::orderByDesc('id')->take(3)->get();
         $abouts = About::orderByDesc('id')->take(1)->get();
         $courses = Course::withCount('students')
-            ->with(['teacher'])
+            ->with(['teacher.category'])
+            ->orderByDesc('id')
+            ->take(6)
             ->get();
 
         $courses = $courses->map(function ($course) {
@@ -27,7 +30,13 @@ class SiteController extends Controller
         $events = Event::orderByDesc('id')->take(3)->get();
         $teachers = Teacher::orderByDesc('id')->take(3)->get();
         $news = News::orderByDesc('id')->take(3)->get();
-        return view('site.index', compact('courses_slider', 'abouts', 'courses', 'events', 'teachers', 'news'));
+        $categories = Category::take(3)->get();
+        $stats = [
+            'students' => Student::count(),
+            'courses' => Course::count(),
+            'teachers' => Teacher::count(),
+        ];
+        return view('site.index', compact('courses_slider', 'abouts', 'courses', 'events', 'teachers', 'news', 'categories', 'stats'));
     }
 
     public function about()
@@ -37,11 +46,21 @@ class SiteController extends Controller
 
         return view('site.about', compact('abouts', 'teachers'));
     }
-    public function courses()
+    public function courses(Request $request)
     {
+        $courses = Course::withCount('students')
+            ->with('teacher.category')
+            ->when($request->q, function ($query, $q) {
+                $query->where('title', 'like', "%{$q}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(9)
+            ->withQueryString();
 
-        $courses = Course::withCount('students')->with('teacher')->orderByDesc('id')->paginate();
-       
+        $courses->getCollection()->transform(function ($course) {
+            $course->is_enrolled = $this->isEnrolled($course->id);
+            return $course;
+        });
 
         return view('site.course', compact('courses'));
     }

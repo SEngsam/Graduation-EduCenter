@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Contact Data</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-</head>
-<body>
-    <div class="container my-5">
-        <div class="alert alert-success">
-            <p><b>Name:</b> {{ $name }}</p>
-            <p><b>Email:</b> {{ $mail }}</p>
-            <p><b>Major:</b> {{ $major }}</p>
-            <p><b>Message:</b> {{ $message }}</p>
-        </div>
-    </div>
-</body>
-</html>
- 
+@extends('site.master')
+
+@section('title', __('site.contact') . ' | ' . config('app.name'))
+
+@section('content')
+
+@include('includes.page-head', ['title' => __('site.contact')])
+
+<div class="container">
+  <div class="card contact-box">
+    <h2 style="font-size:24px;margin-bottom:16px">{{ __('site.contact_thanks', ['name' => $name]) }}</h2>
+    <dl style="margin:0 0 24px">
+      <dt style="color:var(--muted)">{{ __('site.email') }}</dt>
+      <dd style="margin:0 0 12px">{{ $mail }}</dd>
+      <dt style="color:var(--muted)">{{ __('site.major') }}</dt>
+      <dd style="margin:0 0 12px">{{ $major }}</dd>
+      <dt style="color:var(--muted)">{{ __('site.message') }}</dt>
+      <dd style="margin:0">{{ $message }}</dd>
+    </dl>
+    <a href="{{ route('site.index') }}" class="btn btn-outline">{{ __('site.back_home') }}</a>
+  </div>
+</div>
+
+@endsection

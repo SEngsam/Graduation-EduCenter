@@ -1,47 +1,23 @@
 @extends('site.master')
 
+@section('title', __('site.events') . ' | ' . config('app.name'))
+
 @section('content')
 
-<!-- page title -->
-<section class="page-title-section overlay" data-background="{{ asset('frontend/images/backgrounds/page-title.jpg')}}">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8">
-          <ul class="list-inline custom-breadcrumb mb-2">
-            <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html">Home</a></li>
-            <li class="list-inline-item text-white h3 font-secondary nasted">Upcoming Events</li>
-          </ul>
-          <p class="text-lighten mb-0">Our courses offer a good compromise between the continuous assessment favoured by some universities and the emphasis placed on final exams by others.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- /page title -->
+@include('includes.page-head', ['title' => __('site.events'), 'intro' => __('site.events_intro')])
 
-  <!-- courses -->
-  <section class="section">
-    <div class="container">
-      <div class="row">
-        <!-- event -->
+<section class="section">
+  <div class="container">
+    @if ($events->count())
+      <div class="grid" style="margin-bottom:72px">
         @foreach ($events as $item)
-        <div class="col-lg-4 col-sm-6 mb-5">
           @include('includes.event')
-        </div>
         @endforeach
-        <!-- event -->
-
-        <!-- event -->
-
-        <!-- event -->
-
-        <!-- event -->
-
-        <!-- event -->
-
       </div>
-    </div>
-  </section>
-  <!-- /courses -->
+    @else
+      <div class="card empty" style="margin-bottom:72px">{{ __('site.no_events') }}</div>
+    @endif
+  </div>
+</section>
 
-
-@stop
+@endsection

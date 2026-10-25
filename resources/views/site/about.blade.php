@@ -1,102 +1,44 @@
 @extends('site.master')
 
+@section('title', __('site.about') . ' | ' . config('app.name'))
+
 @section('content')
 
-<!-- page title -->
-<section class="page-title-section overlay" data-background="{{ asset('frontend/images/backgrounds/page-title.jpg')}}">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8">
-        <ul class="list-inline custom-breadcrumb mb-2">
-          <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html">Home</a></li>
-          <li class="list-inline-item text-white h3 font-secondary nasted">About Us</li>
-        </ul>
-        <p class="text-lighten mb-0">Our courses offer a good compromise between the continuous assessment favoured by some universities and the emphasis placed on final exams by others.</p>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /page title -->
+@include('includes.page-head', ['title' => __('site.about'), 'intro' => __('site.about_intro')])
 
-<!-- about -->
+@foreach ($abouts as $item)
 <section class="section">
   <div class="container">
-    <div class="row">
-        @foreach ( $abouts as $item)
-      <div class="col-12">
-        <img class="img-fluid w-100 mb-4" src="{{ asset('uploads/abouts/' . $item->image) }}" alt="about image">
-        <h2 class="section-title">{{ $item->title }}</h2>
+    <div class="card about-block">
+      <div class="about-img">
+        @if ($item->image && file_exists(public_path('uploads/abouts/' . $item->image)))
+          <img src="{{ asset('uploads/abouts/' . $item->image) }}" alt="">
+        @else
+          <span style="color:#a8e3d9">@include('includes.icon', ['name' => 'book', 'size' => 96, 'stroke' => 1.4])</span>
+        @endif
+      </div>
+      <div class="about-text">
+        <h2>{{ $item->title }}</h2>
         <p>{{ $item->description }}</p>
-
       </div>
-      @endforeach
     </div>
   </div>
 </section>
-<!-- /about -->
+@endforeach
 
-<!-- funfacts -->
-<section class="section-sm bg-primary">
+@if ($teachers->count())
+<section class="section" style="padding-bottom:72px">
   <div class="container">
-    <div class="row">
-      <!-- funfacts item -->
-      <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-        <div class="text-center">
-          <h2 class="count text-white" data-count="60">0</h2>
-          <h5 class="text-white">TEACHERS</h5>
-        </div>
-      </div>
-      <!-- funfacts item -->
-      <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-        <div class="text-center">
-          <h2 class="count text-white" data-count="50">0</h2>
-          <h5 class="text-white">COURSES</h5>
-        </div>
-      </div>
-      <!-- funfacts item -->
-      <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-        <div class="text-center">
-          <h2 class="count text-white" data-count="1000">0</h2>
-          <h5 class="text-white">STUDENTS</h5>
-        </div>
-      </div>
-      <!-- funfacts item -->
-      <div class="col-md-3 col-sm-6 mb-4 mb-md-0">
-        <div class="text-center">
-          <h2 class="count text-white" data-count="3737">0</h2>
-          <h5 class="text-white">SATISFIED CLIENT</h5>
-        </div>
-      </div>
+    <div class="section-head">
+      <h2>{{ __('site.our_teachers') }}</h2>
+    </div>
+    <div class="grid">
+      @foreach ($teachers as $item)
+        @include('includes.teacher')
+      @endforeach
     </div>
   </div>
 </section>
-<!-- /funfacts -->
+@endif
 
-<!-- success story -->
-  @include('includes.sucessstory')
-<!-- /success story -->
-
-<!-- teachers -->
-<section class="section">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <h2 class="section-title">Our Teachers</h2>
-        </div>
-        <!-- teacher -->
-
-        <!-- teacher -->
-
-        <!-- teacher -->
-        @foreach ( $teachers as $item )
-        <div class="col-lg-4 col-sm-6 mb-5 mb-lg-0">
-            @include('includes.teacher')
-        </div>
-      </div>
-      @endforeach
-    </div>
-  </section>
-  <!-- /teachers -->
-
-  @stop
-
+@endsection

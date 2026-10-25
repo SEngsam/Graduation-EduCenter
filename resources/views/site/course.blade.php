@@ -1,54 +1,30 @@
 @extends('site.master')
 
+@section('title', __('site.courses') . ' | ' . config('app.name'))
+
 @section('content')
 
-    <!-- page title -->
-    <section class="page-title-section overlay" data-background="{{ asset('frontend/images/backgrounds/page-title.jpg') }}">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <ul class="list-inline custom-breadcrumb mb-2">
-                        <li class="list-inline-item"><a class="h2 text-primary font-secondary" href="index.html">Home</a></li>
-                        <li class="list-inline-item text-white h3 font-secondary nasted">Our Courses</li>
-                    </ul>
-                    <p class="text-lighten mb-0">Our courses offer a good compromise between the continuous assessment
-                        favoured by some universities and the emphasis placed on final exams by others.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- /page title -->
+@include('includes.page-head', ['title' => __('site.courses'), 'intro' => __('site.courses_intro')])
 
-    <!-- courses -->
-    <section class="section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <!-- course item -->
-                @include('includes.course')
+<section class="section">
+  <div class="container">
+    <form class="search-box" action="{{ route('site.courses') }}" method="GET" style="margin-bottom:28px;max-width:560px">
+      <label class="sr-only" for="q">{{ __('site.search_placeholder') }}</label>
+      <input type="search" id="q" name="q" value="{{ request('q') }}" placeholder="{{ __('site.search_placeholder') }}">
+      <button type="submit" class="btn btn-primary">{{ __('site.search') }}</button>
+    </form>
 
-                <!-- course item -->
+    @if ($courses->count())
+      <div class="grid">
+        @foreach ($courses as $item)
+          @include('includes.course')
+        @endforeach
+      </div>
+      <div class="pager">{{ $courses->links() }}</div>
+    @else
+      <div class="card empty" style="margin-bottom:72px">{{ __('site.no_courses') }}</div>
+    @endif
+  </div>
+</section>
 
-                <!-- course item -->
-
-                <!-- course item -->
-
-                <!-- course item -->
-
-                <!-- course item -->
-
-                <!-- /course list -->
-                <!-- mobile see all button -->
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <a href="courses.html" class="btn btn-sm btn-outline-primary d-sm-none d-inline-block">sell all</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        </div>
-    </section>
-
-
-
-@stop
+@endsection
