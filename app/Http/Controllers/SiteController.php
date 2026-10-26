@@ -6,7 +6,6 @@ use App\Models\News;
 use App\Models\About;
 use App\Models\Event;
 use App\Models\Course;
-use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -15,8 +14,6 @@ class SiteController extends Controller
 {
     public function index()
     {
-        $courses_slider = Course::orderByDesc('id')->take(3)->get();
-        $abouts = About::orderByDesc('id')->take(1)->get();
         $courses = Course::withCount('students')
             ->with(['teacher.category'])
             ->orderByDesc('id')
@@ -27,18 +24,13 @@ class SiteController extends Controller
             $course->is_enrolled = $this->isEnrolled($course->id);
             return $course;
         });
-        $events = Event::orderByDesc('id')->take(3)->get();
-        $teachers = Teacher::orderByDesc('id')->take(3)->get();
-        $news = News::orderByDesc('id')->take(3)->get();
+        $events = Event::orderByDesc('id')->take(2)->get();
+        $teachers = Teacher::withCount('course')->orderByDesc('id')->take(3)->get();
+        $news = News::orderByDesc('id')->first();
         $categories = Category::take(3)->get();
-        $stats = [
-            'students' => Student::count(),
-            'courses' => Course::count(),
-            'teachers' => Teacher::count(),
-        ];
-        return view('site.index', compact('courses_slider', 'abouts', 'courses', 'events', 'teachers', 'news', 'categories', 'stats'));
-    }
 
+        return view('site.index', compact('courses', 'events', 'teachers', 'news', 'categories'));
+    }
     public function about()
     {
         $abouts = About::orderByDesc('id')->take(1)->get();
@@ -52,6 +44,9 @@ class SiteController extends Controller
             ->with('teacher.category')
             ->when($request->q, function ($query, $q) {
                 $query->where('title', 'like', "%{$q}%");
+            })
+            ->when($request->teacher, function ($query, $teacher) {
+                $query->where('teacher_id', $teacher);
             })
             ->orderByDesc('id')
             ->paginate(9)
