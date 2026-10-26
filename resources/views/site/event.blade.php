@@ -37,7 +37,7 @@
         </div>
       @endif
     @else
-      <div class="card empty">{{ __('site.no_events') }}</div>
+      @include('includes.empty', ['icon' => 'calendar', 'text' => __('site.no_events')])
     @endif
   </div>
 </section>

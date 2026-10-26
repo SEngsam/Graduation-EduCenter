@@ -10,11 +10,11 @@
   <div class="card contact-box">
     <h2 style="font-size:24px;margin-bottom:16px">{{ __('site.contact_thanks', ['name' => $name]) }}</h2>
     <dl style="margin:0 0 24px">
-      <dt style="color:var(--muted)">{{ __('site.email') }}</dt>
+      <dt style="color:var(--ink-subtle)">{{ __('site.email') }}</dt>
       <dd style="margin:0 0 12px">{{ $mail }}</dd>
-      <dt style="color:var(--muted)">{{ __('site.major') }}</dt>
+      <dt style="color:var(--ink-subtle)">{{ __('site.major') }}</dt>
       <dd style="margin:0 0 12px">{{ $major }}</dd>
-      <dt style="color:var(--muted)">{{ __('site.message') }}</dt>
+      <dt style="color:var(--ink-subtle)">{{ __('site.message') }}</dt>
       <dd style="margin:0">{{ $message }}</dd>
     </dl>
     <a href="{{ route('site.index') }}" class="btn btn-outline">{{ __('site.back_home') }}</a>

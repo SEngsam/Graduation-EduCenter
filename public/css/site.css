@@ -838,3 +838,103 @@ body { background: var(--surface-page); color: var(--ink); }
   .user-chip { display: none; }
   .main-nav a { padding: 8px 10px; }
 }
+
+/* error pages */
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: 32px max(16px, 6vw);
+}
+.error-box { flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 14px; max-width: 560px; }
+.error-code {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brand-orange);
+  font-variant-numeric: tabular-nums;
+}
+.error-box h1 { font-size: 34px; }
+.error-box p { margin: 0; color: var(--ink-muted); font-size: 18px; }
+.error-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+@media (max-width: 600px) { .error-code { font-size: 84px; } .error-box h1 { font-size: 26px; } }
+/* dialog */
+dialog.sheet {
+  width: min(480px, calc(100vw - 32px));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  color: var(--ink);
+  box-shadow: var(--shadow-raised);
+}
+dialog.sheet::backdrop { background: rgba(20, 33, 61, .5); }
+dialog.sheet form { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+dialog.sheet h2 { font-size: 20px; }
+
+dialog.sheet .form-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* flash with icon and close button */
+.flash { display: flex; align-items: center; gap: 10px; }
+.flash span { flex: 1; }
+.flash-close {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.flash-close:hover { background: rgba(0, 0, 0, .06); }
+
+/* empty states */
+.empty-state {
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--ink-subtle);
+}
+.empty-state .icon-box { width: 56px; height: 56px; background: var(--surface-sunken); color: var(--ink-subtle); }
+.empty-state p { margin: 0; font-size: 17px; }
+
+/* skip link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  inset-inline-start: 16px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: var(--brand-navy);
+  color: var(--ink-inverse);
+  text-decoration: none;
+  font-weight: 600;
+}
+.skip-link:focus { top: 12px; color: var(--ink-inverse); }
+
+/* motion */
+.btn, .card, .main-nav a, .side-nav a, .filter-bar button, .page-link, .icon-btn {
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .2s ease, transform .2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.course-card:hover, .portrait:hover, .event-card:hover, .cat-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-raised);
+  transform: translateY(-2px);
+}
+.thumb img { transition: transform .4s ease; }
+.course-card:hover .thumb img, .event-card:hover .thumb img { transform: scale(1.03); }
+.thumb { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .course-card:hover, .portrait:hover, .event-card:hover, .cat-card:hover { transform: none; }
+}

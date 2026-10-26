@@ -95,7 +95,7 @@
         @endforeach
       </div>
     @else
-      <div class="card empty">{{ __('site.no_courses') }}</div>
+      @include('includes.empty', ['icon' => 'book', 'text' => __('site.no_courses')])
     @endif
   </div>
 </section>
@@ -160,7 +160,7 @@
           </div>
         </div>
       @empty
-        <p class="empty">{{ __('site.no_events') }}</p>
+        @include('includes.empty', ['icon' => 'calendar', 'text' => __('site.no_events')])
       @endforelse
     </div>
     <div>

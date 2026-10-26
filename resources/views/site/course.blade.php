@@ -22,7 +22,7 @@
       </div>
       <div class="pager">{{ $courses->links() }}</div>
     @else
-      <div class="card empty" style="margin-bottom:72px">{{ __('site.no_courses') }}</div>
+      <div style="margin-bottom:72px">@include('includes.empty', ['icon' => 'search', 'text' => request('q') ? __('site.no_results', ['q' => request('q')]) : __('site.no_courses')])</div>
     @endif
   </div>
 </section>

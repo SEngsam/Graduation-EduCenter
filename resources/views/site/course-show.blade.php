@@ -72,7 +72,7 @@
   <aside class="card enroll-box" aria-label="{{ __('site.enroll') }}">
     @if ($course->is_enrolled)
       <span class="tag" style="background:var(--success-soft);color:var(--success)">{{ __('site.enrolled') }}</span>
-      <form action="{{ route('courses.removeEnrollment', $course->id) }}" method="POST">
+      <form action="{{ route('courses.removeEnrollment', $course->id) }}" method="POST" data-confirm="{{ __('site.confirm_unenroll', ['name' => $course->title]) }}" data-confirm-ok="{{ __('site.unenroll') }}">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-danger-soft btn-block">{{ __('site.unenroll') }}</button>

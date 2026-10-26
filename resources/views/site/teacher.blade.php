@@ -44,7 +44,7 @@
           </div>
         </article>
       @empty
-        <div class="card empty">{{ __('site.no_teachers') }}</div>
+        @include('includes.empty', ['icon' => 'users', 'text' => __('site.no_teachers')])
       @endforelse
     </div>
   </div>

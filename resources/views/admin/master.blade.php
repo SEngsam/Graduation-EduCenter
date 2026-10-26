@@ -15,6 +15,7 @@
   @include('includes.theme-head')
 </head>
 <body>
+<a class="skip-link" href="#main">{{ __('site.skip') }}</a>
 
 <div class="admin">
   @include('admin.sidebar')
@@ -40,22 +41,14 @@
       </span>
     </header>
 
-    <main class="admin-main">
+    <main class="admin-main" id="main" tabindex="-1">
       @hasSection('crumbs')
         <nav class="admin-crumbs" aria-label="breadcrumb">
           <a href="{{ route('admin.index') }}">{{ __('dash.panel') }}</a> / @yield('crumbs')
         </nav>
       @endif
 
-      @if (session('success'))
-        <div class="flash" role="status">{{ session('success') }}</div>
-      @endif
-      @if (session('error'))
-        <div class="flash error" role="alert">{{ session('error') }}</div>
-      @endif
-      @if (session('msg'))
-        <div class="flash {{ session('type') == 'danger' ? 'error' : '' }}" role="status">{{ session('msg') }}</div>
-      @endif
+      @include('includes.flash')
       @include('admin.errors')
 
       @yield('content')
@@ -69,12 +62,6 @@
     this.setAttribute('aria-expanded', open);
   });
 
-  // confirm before submitting delete forms
-  document.querySelectorAll('form[data-confirm]').forEach(function (form) {
-    form.addEventListener('submit', function (e) {
-      if (!window.confirm(form.dataset.confirm)) e.preventDefault();
-    });
-  });
   // show the chosen file name and preview in upload boxes
   document.querySelectorAll('.upload input[type=file]').forEach(function (input) {
     input.addEventListener('change', function () {
@@ -82,11 +69,19 @@
       var file = input.files[0];
       if (!file) return;
       box.querySelector('strong').textContent = file.name;
+      if (file.type.indexOf('image/') !== 0) return;
       var img = box.querySelector('img');
-      if (img && file.type.indexOf('image/') === 0) img.src = URL.createObjectURL(file);
+      if (!img) {
+        img = document.createElement('img');
+        img.alt = '';
+        var placeholder = box.querySelector('.icon-box');
+        box.replaceChild(img, placeholder);
+      }
+      img.src = URL.createObjectURL(file);
     });
   });
 </script>
+@include('includes.confirm-dialog')
 @yield('scripts')
 </body>
 </html>

@@ -31,12 +31,12 @@
         @endif
         <span class="teacher">{{ $item->teacher->name }}</span>
       @else
-        <span class="teacher" style="color:var(--muted)">{{ __('site.no_teacher') }}</span>
+        <span class="teacher" style="color:var(--ink-subtle)">{{ __('site.no_teacher') }}</span>
       @endif
 
       @if (auth()->check() && (auth()->user()->hasRole(\App\Models\Role::ROLE_STUDENT) || auth()->user()->hasAbility('enroll_courses')))
         @if ($enrolled)
-          <form action="{{ route('courses.removeEnrollment', $item->id) }}" method="POST">
+          <form action="{{ route('courses.removeEnrollment', $item->id) }}" method="POST" data-confirm="{{ __('site.confirm_unenroll', ['name' => $item->title]) }}" data-confirm-ok="{{ __('site.unenroll') }}">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger-soft btn-sm">{{ __('site.unenroll') }}</button>

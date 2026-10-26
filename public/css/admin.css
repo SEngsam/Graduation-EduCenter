@@ -200,20 +200,6 @@
 .check-group { border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 14px 16px; }
 .check-group legend { padding: 0 6px; font-weight: 600; }
 
-/* dialog */
-dialog.sheet {
-  width: min(480px, calc(100vw - 32px));
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-xl);
-  background: var(--surface-card);
-  color: var(--ink);
-  box-shadow: var(--shadow-raised);
-}
-dialog.sheet::backdrop { background: rgba(20, 33, 61, .5); }
-dialog.sheet form { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-dialog.sheet h2 { font-size: 20px; }
-
 /* overview */
 .overview-grid { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
 .overview-grid > .wide { flex: 999 1 520px; min-width: 0; }

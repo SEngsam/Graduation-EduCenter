@@ -12,6 +12,7 @@
   @include('includes.theme-head')
 </head>
 <body>
+<a class="skip-link" href="#main">{{ __('site.skip') }}</a>
 <div class="app">
   <aside class="app-side" aria-label="{{ __('site.menu') }}">
     <a class="brand" href="{{ route('site.index') }}">
@@ -34,15 +35,11 @@
     </div>
   </aside>
 
-  <main class="app-main">
-    @if (session('success'))
-      <div class="flash" role="status">{{ session('success') }}</div>
-    @endif
-    @if (session('error'))
-      <div class="flash error" role="alert">{{ session('error') }}</div>
-    @endif
+  <main class="app-main" id="main" tabindex="-1">
+    @include('includes.flash')
     @yield('content')
   </main>
 </div>
+@include('includes.confirm-dialog')
 </body>
 </html>

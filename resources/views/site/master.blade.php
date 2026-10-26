@@ -13,6 +13,7 @@
   @include('includes.theme-head')
 </head>
 <body>
+<a class="skip-link" href="#main">{{ __('site.skip') }}</a>
 
 <header class="site-header" id="siteHeader">
   <div class="container">
@@ -60,15 +61,10 @@
 </header>
 
 <div class="container">
-  @if (session('success'))
-    <div class="flash">{{ session('success') }}</div>
-  @endif
-  @if (session('error'))
-    <div class="flash error">{{ session('error') }}</div>
-  @endif
+  @include('includes.flash')
 </div>
 
-<main>
+<main id="main" tabindex="-1">
   @yield('content')
 </main>
 
@@ -100,6 +96,7 @@
     this.setAttribute('aria-expanded', open);
   });
 </script>
+@include('includes.confirm-dialog')
 @yield('scripts')
 </body>
 </html>

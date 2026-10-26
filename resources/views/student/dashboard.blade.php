@@ -37,7 +37,7 @@
       </div>
       <div class="acts">
         <a href="{{ route('site.course', $course->id) }}" class="btn btn-outline btn-sm">{{ __('site.open') }}</a>
-        <form action="{{ route('courses.removeEnrollment', $course->id) }}" method="POST">
+        <form action="{{ route('courses.removeEnrollment', $course->id) }}" method="POST" data-confirm="{{ __('site.confirm_unenroll', ['name' => $course->title]) }}" data-confirm-ok="{{ __('site.unenroll') }}">
           @csrf
           @method('DELETE')
           <button type="submit" class="btn btn-danger-soft btn-sm">{{ __('site.unenroll') }}</button>
@@ -45,10 +45,7 @@
       </div>
     </div>
   @empty
-    <div class="empty">
-      <p style="margin:0 0 12px">{{ __('site.no_my_courses') }}</p>
-      <a href="{{ route('site.courses') }}" class="btn btn-primary">{{ __('site.browse_courses') }}</a>
-    </div>
+    @include('includes.empty', ['icon' => 'book', 'text' => __('site.no_my_courses'), 'action' => [route('site.courses'), __('site.browse_courses')]])
   @endforelse
 </section>
 
@@ -71,7 +68,7 @@
         </div>
       </div>
     @empty
-      <p class="empty">{{ __('site.no_events') }}</p>
+      @include('includes.empty', ['icon' => 'calendar', 'text' => __('site.no_events')])
     @endforelse
   </section>
   <section>
