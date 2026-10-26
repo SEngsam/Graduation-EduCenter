@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{{ asset('css/tokens.css') }}">
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
   @yield('styles')
+  @include('includes.theme-head')
 </head>
 <body>
 
@@ -37,6 +38,7 @@
     </nav>
 
     <div class="header-actions">
+      @include('includes.theme-toggle')
       <a class="lang-link" href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}">{{ __('site.other_lang') }}</a>
       @auth
         <span class="user-chip">{{ __('site.hi', ['name' => auth()->user()->name]) }}</span>

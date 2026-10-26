@@ -223,3 +223,19 @@ dialog.sheet h2 { font-size: 20px; }
 .todo select { flex: 1; min-height: 40px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface-card); font: inherit; color: var(--ink); }
 a.stat { text-decoration: none; color: inherit; }
 a.stat:hover { border-color: var(--brand-orange); }
+
+@media (max-width: 600px) {
+  .admin-main { padding: 20px 16px; }
+  .admin-top { padding: 10px 16px; }
+  .admin-form { padding: 20px 16px; }
+  .admin-title h1 { font-size: 24px; }
+}
+
+.side-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.admin-side .nav-toggle { background: transparent; border-color: rgba(255, 255, 255, .2); color: var(--ink-inverse); }
+@media (max-width: 960px) {
+  .admin-side { flex-basis: 100%; padding: 12px 16px; gap: 12px; }
+  .admin-side .nav-toggle { display: inline-flex; }
+  .admin-side .admin-nav, .admin-side .side-bottom { display: none; }
+  .admin-side.open .admin-nav, .admin-side.open .side-bottom { display: flex; }
+}

@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/tokens.css') }}">
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+  @include('includes.theme-head')
 </head>
 <body>
 <div class="app">
@@ -24,6 +25,7 @@
       <a href="{{ route('student.profile') }}" class="{{ Route::is('student.profile') ? 'active' : '' }}">@include('includes.icon', ['name' => 'user', 'size' => 20]) {{ __('site.profile') }}</a>
     </nav>
     <div class="side-foot">
+      @include('includes.theme-toggle')
       <a class="lang-link" href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}">{{ __('site.other_lang') }}</a>
       <form action="{{ route('logout') }}" method="POST">
         @csrf

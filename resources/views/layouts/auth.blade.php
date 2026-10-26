@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/tokens.css') }}">
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+  @include('includes.theme-head')
 </head>
 <body>
 <div class="auth">
@@ -24,7 +25,10 @@
       <h1>@yield('side_title')</h1>
       <p>@yield('side_text')</p>
     </div>
-    <a href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}" style="color:#c3cad9">{{ __('site.other_lang') }}</a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}" style="color:var(--ink-inverse-muted)">{{ __('site.other_lang') }}</a>
+      @include('includes.theme-toggle')
+    </div>
   </aside>
   <main class="auth-main">
     @yield('content')

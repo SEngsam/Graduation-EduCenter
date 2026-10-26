@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
   <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
   @yield('styles')
+  @include('includes.theme-head')
 </head>
 <body>
 
@@ -26,6 +27,7 @@
           <a class="lang-link" rel="alternate" hreflang="{{ $code }}" href="{{ LaravelLocalization::getLocalizedURL($code, null, [], true) }}">{{ $props['native'] }}</a>
         @endif
       @endforeach
+      @include('includes.theme-toggle')
       <a class="icon-btn" href="{{ route('admin.index') }}" aria-label="{{ __('dash.notifications') }}">
         @include('includes.icon', ['name' => 'bell', 'size' => 20])
         @if ($unread = $me->unreadNotifications->count())
@@ -62,6 +64,11 @@
 </div>
 
 <script>
+  document.getElementById('adminNavToggle').addEventListener('click', function () {
+    var open = this.closest('.admin-side').classList.toggle('open');
+    this.setAttribute('aria-expanded', open);
+  });
+
   // confirm before submitting delete forms
   document.querySelectorAll('form[data-confirm]').forEach(function (form) {
     form.addEventListener('submit', function (e) {

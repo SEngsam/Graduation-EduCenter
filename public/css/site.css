@@ -794,3 +794,47 @@ h1, h2, h3, h4 {
 }
 .page-item.active .page-link { background: var(--brand-navy); border-color: var(--brand-navy); color: var(--ink-inverse); font-weight: 600; }
 .page-item.disabled .page-link { color: var(--ink-subtle); }
+
+@media (max-width: 600px) {
+  .auth-side, .auth-main { flex-basis: 100%; min-width: 0; }
+  .auth-side { padding: 32px 20px; gap: 24px; }
+  .auth-side h1 { font-size: 30px; }
+  .auth-main { padding: 32px 16px; }
+  .app-main, .contact-box, .form-card, .panel { padding-left: 16px; padding-right: 16px; }
+  .cta { padding: 28px 20px; }
+  .page-head h1, .detail-head h1 { font-size: 30px; }
+}
+
+/* theme toggle + dark-mode adjustments */
+.icon-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.theme-toggle .when-dark { display: none; }
+.theme-toggle span { display: inline-flex; }
+:root[data-theme="dark"] .theme-toggle .when-dark { display: inline-flex; }
+:root[data-theme="dark"] .theme-toggle .when-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .when-dark { display: inline-flex; }
+  :root:not([data-theme="light"]) .theme-toggle .when-light { display: none; }
+}
+/* the navy button disappears on dark cards, so flip it */
+:root[data-theme="dark"] .btn-dark { background: var(--ink); color: var(--surface-page); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn-dark { background: var(--ink); color: var(--surface-page); }
+}
+body { background: var(--surface-page); color: var(--ink); }
+.main-nav a { white-space: nowrap; }
+@media (max-width: 1320px) and (min-width: 961px) {
+  .user-chip { display: none; }
+  .main-nav a { padding: 8px 10px; }
+}

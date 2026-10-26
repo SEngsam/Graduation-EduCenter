@@ -145,4 +145,5 @@ return [
     'update_password' => 'Update password',
     'student' => 'Student',
     'min_8' => 'At least 8 characters',
+    'toggle_theme' => 'Switch light / dark mode',
 ];

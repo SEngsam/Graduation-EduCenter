@@ -16,12 +16,17 @@
   };
 @endphp
 <aside class="admin-side" aria-label="{{ __('dash.panel') }}">
-  <a class="brand" href="{{ route('admin.index') }}">
-    <span class="brand-mark" style="color:var(--on-orange)">@include('includes.icon', ['name' => 'cap'])</span>
-    <span class="brand-name"><strong>EduCenter</strong><small>{{ __('dash.panel') }}</small></span>
-  </a>
+  <div class="side-head">
+    <a class="brand" href="{{ route('admin.index') }}">
+      <span class="brand-mark" style="color:var(--on-orange)">@include('includes.icon', ['name' => 'cap'])</span>
+      <span class="brand-name"><strong>EduCenter</strong><small>{{ __('dash.panel') }}</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="{{ __('site.menu') }}" aria-expanded="false" aria-controls="adminNav" id="adminNavToggle">
+      @include('includes.icon', ['name' => 'menu'])
+    </button>
+  </div>
 
-  <nav class="admin-nav">
+  <nav class="admin-nav" id="adminNav">
     <a href="{{ route('admin.index') }}" class="{{ Route::is('admin.index') ? 'active' : '' }}">@include('includes.icon', ['name' => 'grid', 'size' => 20]) {{ __('dash.overview') }}</a>
 
     @if ($items = $visible($links))
