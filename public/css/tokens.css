@@ -2,6 +2,7 @@
 :root, [data-theme="light"] {
   --brand-navy: #14213d;
   --brand-navy-2: #22325a;
+  --fill-strong: #14213d;
   --brand-orange: #f37021;
   --brand-orange-hover: #dd5f12;
   --on-orange: #14213d;
@@ -39,6 +40,7 @@
 [data-theme="dark"] {
   --brand-navy: #14213d;
   --brand-navy-2: #2a3a64;
+  --fill-strong: #2a3a64;
   --brand-orange: #ff8a3d;
   --brand-orange-hover: #ff9f5e;
   --on-orange: #14213d;
@@ -78,6 +80,7 @@
   :root:not([data-theme="light"]) {
     --brand-navy: #14213d;
     --brand-navy-2: #2a3a64;
+    --fill-strong: #2a3a64;
     --brand-orange: #ff8a3d;
     --brand-orange-hover: #ff9f5e;
     --on-orange: #14213d;

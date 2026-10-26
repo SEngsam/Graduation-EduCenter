@@ -26,8 +26,10 @@
       <a href="{{ route('student.profile') }}" class="{{ Route::is('student.profile') ? 'active' : '' }}">@include('includes.icon', ['name' => 'user', 'size' => 20]) {{ __('site.profile') }}</a>
     </nav>
     <div class="side-foot">
-      @include('includes.theme-toggle')
-      <a class="lang-link" href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}">{{ __('site.other_lang') }}</a>
+      <div class="side-tools">
+        <a class="lang-link" href="{{ route('lang.switch', app()->getLocale() == 'ar' ? 'en' : 'ar') }}">{{ __('site.other_lang') }}</a>
+        @include('includes.theme-toggle')
+      </div>
       <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit">@include('includes.icon', ['name' => 'logout', 'size' => 20]) {{ __('site.logout') }}</button>

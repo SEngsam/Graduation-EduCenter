@@ -395,7 +395,7 @@ h1, h2, h3, h4 {
   font: inherit;
   cursor: pointer;
 }
-.filter-bar button.active { background: var(--brand-navy); border-color: var(--brand-navy); color: var(--ink-inverse); }
+.filter-bar button.active { background: var(--fill-strong); border-color: var(--fill-strong); color: var(--ink-inverse); }
 
 /* events & news */
 .event-row {
@@ -410,7 +410,7 @@ h1, h2, h3, h4 {
   width: 72px;
   height: 72px;
   border-radius: 12px;
-  background: var(--brand-navy);
+  background: var(--fill-strong);
   color: var(--ink-inverse);
   display: flex;
   flex-direction: column;
@@ -446,6 +446,7 @@ h1, h2, h3, h4 {
   padding: 36px;
 }
 .about-block .about-img {
+  position: relative;
   flex: 1 1 340px;
   min-height: 300px;
   border-radius: 16px;
@@ -455,7 +456,7 @@ h1, h2, h3, h4 {
   align-items: center;
   justify-content: center;
 }
-.about-block .about-img img { width: 100%; height: 100%; object-fit: cover; }
+.about-block .about-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .about-block .about-text { flex: 1 1 400px; display: flex; flex-direction: column; gap: 16px; }
 .about-block h2 { font-size: 32px; }
 .about-block p { margin: 0; color: var(--ink-muted); font-size: 17px; }
@@ -528,7 +529,7 @@ h1, h2, h3, h4 {
   background: var(--surface-card);
   text-decoration: none;
 }
-.pager span[aria-current] span { background: var(--brand-navy); color: var(--ink-inverse); border-color: var(--brand-navy); }
+.pager span[aria-current] span { background: var(--fill-strong); color: var(--ink-inverse); border-color: var(--fill-strong); }
 
 .empty { padding: 40px; text-align: center; color: var(--ink-subtle); }
 
@@ -661,7 +662,7 @@ h1, h2, h3, h4 {
   width: 60px;
   padding: 6px 0;
   border-radius: 12px;
-  background: var(--brand-navy);
+  background: var(--fill-strong);
   color: var(--ink-inverse);
   text-align: center;
   line-height: 1.2;
@@ -731,10 +732,13 @@ h1, h2, h3, h4 {
   border-radius: var(--radius-md);
   text-decoration: none;
 }
-.side-nav a.active { background: var(--brand-navy); color: var(--ink-inverse); font-weight: 600; }
-.side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.side-nav a.active { background: var(--fill-strong); color: var(--ink-inverse); font-weight: 600; }
+.side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line); }
+.side-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 6px; }
+.side-tools .lang-link { border: 1px solid var(--line); border-radius: var(--radius-md); padding: 10px 14px; line-height: 1; }
+.side-tools .lang-link:hover { color: var(--ink); border-color: var(--line-strong); }
 .side-foot form { margin: 0; }
-.side-foot button {
+.side-foot form button {
   width: 100%;
   display: flex;
   align-items: center;
@@ -792,7 +796,7 @@ h1, h2, h3, h4 {
   text-decoration: none;
   font-variant-numeric: tabular-nums;
 }
-.page-item.active .page-link { background: var(--brand-navy); border-color: var(--brand-navy); color: var(--ink-inverse); font-weight: 600; }
+.page-item.active .page-link { background: var(--fill-strong); border-color: var(--fill-strong); color: var(--ink-inverse); font-weight: 600; }
 .page-item.disabled .page-link { color: var(--ink-subtle); }
 
 @media (max-width: 600px) {
@@ -938,3 +942,12 @@ dialog.sheet .form-actions { display: flex; gap: 8px; justify-content: flex-end;
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .course-card:hover, .portrait:hover, .event-card:hover, .cat-card:hover { transform: none; }
 }
+
+/* Content typed in the admin panel can be English inside an Arabic page (or the
+   other way round). Let each block pick its own direction so the full stop and
+   brackets land on the right side, but keep the page's alignment. */
+:where(main) :where(h1, h2, h3, h4, p, dd, li, blockquote) { unicode-bidi: plaintext; }
+[dir="rtl"] :where(main) :where(h1, h2, h3, h4, p, dd, li, blockquote) { text-align: right; }
+[dir="ltr"] :where(main) :where(h1, h2, h3, h4, p, dd, li, blockquote) { text-align: left; }
+[dir] :is(.teacher-card, .empty, .empty-state, .auth-foot, .enroll-box .note) :is(h1, h2, h3, h4, p),
+[dir] :is(.auth-foot, .enroll-box .note) { text-align: center; }

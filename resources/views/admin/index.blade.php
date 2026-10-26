@@ -71,7 +71,7 @@
               <td><span class="record">{{ optional($reg->students)->name ?? '—' }}</span></td>
               <td>{{ optional($reg->course)->title ?? '—' }}</td>
               <td>{{ optional($reg->teacher)->name ?? __('dash.no_teacher') }}</td>
-              <td class="muted">{{ optional($reg->created_at)->translatedFormat('j M Y') }}</td>
+              <td class="muted">{{ $reg->created_at ? $reg->created_at->translatedFormat('j M Y') : '—' }}</td>
             </tr>
           @empty
             <tr><td colspan="4" class="muted" style="text-align:center">{{ __('dash.no_enrollments') }}</td></tr>

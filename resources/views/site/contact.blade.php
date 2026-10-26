@@ -36,10 +36,17 @@
 
   <aside class="info-card">
     <h2>{{ __('site.contact_info') }}</h2>
-    <div class="info-row"><span class="ic">@include('includes.icon', ['name' => 'pin'])</span><div><small>{{ __('site.address') }}</small><strong>{{ config('site.address') ?: '—' }}</strong></div></div>
-    <div class="info-row"><span class="ic">@include('includes.icon', ['name' => 'phone'])</span><div><small>{{ __('site.tel') }}</small><strong dir="ltr">{{ config('site.phone') ?: '—' }}</strong></div></div>
-    <div class="info-row"><span class="ic">@include('includes.icon', ['name' => 'mail'])</span><div><small>{{ __('site.email') }}</small><strong>{{ config('site.email') ?: (config('mail.from.address') ?: '—') }}</strong></div></div>
-    <div class="info-row"><span class="ic">@include('includes.icon', ['name' => 'clock'])</span><div><small>{{ __('site.hours') }}</small><strong>{{ config('site.hours') ?: '—' }}</strong></div></div>
+    @php
+      $info = array_filter([
+          ['pin', __('site.address'), config('site.address'), null],
+          ['phone', __('site.tel'), config('site.phone'), 'ltr'],
+          ['mail', __('site.email'), config('site.email') ?: config('mail.from.address'), null],
+          ['clock', __('site.hours'), config('site.hours'), null],
+      ], fn ($row) => filled($row[2]));
+    @endphp
+    @foreach ($info as [$icon, $label, $value, $dir])
+      <div class="info-row"><span class="ic">@include('includes.icon', ['name' => $icon])</span><div><small>{{ $label }}</small><strong @if ($dir) dir="{{ $dir }}" @endif>{{ $value }}</strong></div></div>
+    @endforeach
   </aside>
 </div>
 
