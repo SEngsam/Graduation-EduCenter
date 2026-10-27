@@ -1,64 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# EduCenter — نظام إدارة مركز تعليمي
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+مشروع تخرج. موقع لمركز تعليمي فيه ثلاث أنواع مستخدمين:
 
-## About Laravel
+- **الطالب:** بيتصفّح الكورسات وبيسجّل فيها، وبيتابع دروسه، وبيسلّم الواجبات، وبيشوف حضوره وعلاماته.
+- **المدرّس:** بينزّل الدروس، وبيحدد مواعيد الكورس، وبيسجّل الحضور، وبيعمل واجبات وبيصححها.
+- **الإدارة:** بتدير الأقسام والكورسات والمدرّسين والفعاليات والأخبار والمستخدمين والصلاحيات، وبتقرأ رسائل التواصل.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+الموقع بالعربي والإنجليزي، وفيه وضع ليلي، وبيشتغل على الموبايل.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+![الرئيسية](docs/screenshots/01-home.jpg)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## التقنيات
 
-## Learning Laravel
+- Laravel 8 و PHP 8
+- MySQL، أو SQLite للتجربة السريعة
+- Blade و CSS عادي. الألوان والمسافات معرّفة كمتغيرات بملف `public/css/tokens.css`
+- `mcamara/laravel-localization` للغتين بلوحة التحكم
+- `tymon/jwt-auth` للـ API
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## التشغيل
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone <repo-url> educenter
+cd educenter
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-## Laravel Sponsors
+عدّل إعدادات قاعدة البيانات بملف `.env`، وبعدها:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```bash
+php artisan migrate --seed
+php artisan serve
+```
 
-### Premium Partners
+وافتح `http://127.0.0.1:8000`.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+إذا بدك تجرب بسرعة بدون MySQL:
 
-## Contributing
+```bash
+touch database/database.sqlite
+# بملف .env:
+# DB_CONNECTION=sqlite
+# DB_DATABASE=/المسار/الكامل/database/database.sqlite
+php artisan migrate --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## حسابات التجربة
 
-## Code of Conduct
+كلمة السر لكل الحسابات: `password`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| الدور | الإيميل |
+|---|---|
+| مدير النظام | `super_admin@example.com` |
+| مدرّس | `teacher@example.com` |
+| طالب | `student@example.com` |
+| طلاب إضافيين | `student1@example.com` لحد `student5@example.com` |
+| مدير أقسام / كورسات / فعاليات / أخبار | `category_manager@example.com`، `course_manager@example.com`، `event_manager@example.com`، `news_manager@example.com` |
 
-## Security Vulnerabilities
+الـ seeder اسمه `AcademicSeeder`، وبيعبّي كورس الفيزياء بدروس ومواعيد وحصص سابقة وواجبات وتسليمات، حتى تكون الصفحات مليانة من أول تشغيل.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## الاختبارات
 
-## License
+```bash
+php artisan test
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+فيه 28 اختبار، بيشتغلوا على SQLite بالذاكرة وما بيلمسوا قاعدة بياناتك. بيغطّوا:
+
+- التسجيل بكورس: ما بينقبل التسجيل مرتين، ولا التسجيل بكورس ما إلو مدرّس.
+- الصلاحيات: الطالب ما بيفوت على بوابة المدرّس، والمدرّس ما بيفتح كورس مش إله.
+- الدروس: المسودة مخفية عن الطالب، ونسبة التقدّم بتنحسب صح.
+- الحضور: إعادة الحفظ بتعدّل وما بتكرر، والطالب من كورس تاني ما بينسجّل.
+- الواجبات: التسليم، واستبدال الملف، والعلامة ما بتتجاوز الحد، والواجب المصحّح ما بيتعدّل، ومدرّس تاني ما بيقدر يصحح.
+- نموذج التواصل.
+
+## هيكل المشروع
+
+```
+app/Http/Controllers/
+├── SiteController.php            الموقع العام
+├── StudentController.php         لوحة الطالب والملف الشخصي
+├── StudentCourseController.php   صفحة الكورس عند الطالب: الدروس والتسليم
+├── Teach/                        بوابة المدرّس
+│   ├── DashboardController.php
+│   ├── CourseController.php      الوحدات والدروس والمواعيد
+│   ├── AttendanceController.php
+│   └── AssignmentController.php  الواجبات والتصحيح
+├── Admin/                        لوحة التحكم
+└── Api/                          الـ API
+
+resources/views/
+├── site/      الموقع العام
+├── student/   صفحات الطالب
+├── teach/     صفحات المدرّس
+├── admin/     لوحة التحكم
+└── includes/  أجزاء مشتركة: كروت، أيقونات، رسائل، نافذة التأكيد
+```
+
+## الروابط المهمة
+
+| الرابط | الصفحة |
+|---|---|
+| `/` | الرئيسية |
+| `/courses` | الكورسات، مع بحث وفلترة حسب المدرّس |
+| `/my` | لوحة الطالب |
+| `/my/courses/{id}` | الكورس عند الطالب |
+| `/teach` | لوحة المدرّس |
+| `/teach/courses/{id}` | محتوى الكورس |
+| `/teach/courses/{id}/attendance` | الحضور |
+| `/teach/courses/{id}/assignments` | الواجبات |
+| `/ar/admin` | لوحة التحكم |
+
+## قاعدة البيانات
+
+المخطط وشرح الجداول موجودين بملف [docs/database.md](docs/database.md).
+
+## صور
+
+| | |
+|---|---|
+| ![لوحة الطالب](docs/screenshots/04-student-dashboard.jpg) | ![الكورس عند الطالب](docs/screenshots/05-student-course.jpg) |
+| ![لوحة المدرّس](docs/screenshots/06-teacher-dashboard.jpg) | ![محتوى الكورس](docs/screenshots/07-course-content.jpg) |
+| ![الحضور](docs/screenshots/08-attendance.jpg) | ![الواجبات](docs/screenshots/09-assignments.jpg) |
+| ![لوحة التحكم](docs/screenshots/10-admin.jpg) | ![الوضع الليلي](docs/screenshots/11-dark-mode.jpg) |
