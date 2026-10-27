@@ -9,7 +9,10 @@
     <h1>{{ __('site.welcome_name', ['name' => auth()->user()->name]) }}</h1>
     <p>{{ __('site.dashboard_sub') }}</p>
   </div>
-  <a href="{{ route('site.courses') }}" class="btn btn-primary">{{ __('site.enroll_new') }}</a>
+  <div class="title-actions">
+    @include('includes.bell')
+    <a href="{{ route('site.courses') }}" class="btn btn-primary">{{ __('site.enroll_new') }}</a>
+  </div>
 </div>
 
 <div class="stat-grid">

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\Category1Notification;
+use App\Support\Notifier;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Role;
 use App\Models\Teacher;
 use App\Models\User;
-use App\Notifications\CategoryNotification;
+use App\Notifications\CourseNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 
 class CategoryController extends Controller
 {
@@ -49,8 +49,8 @@ class CategoryController extends Controller
             'image' => $this->saveImage($request, 'categories'),
         ]);
 
-        Notification::send(User::all(), new CategoryNotification($request->name_major));
-        event(new Category1Notification($request->name_major));
+        $staff = User::where('role_id', '!=', Role::ROLE_STUDENT)->where('id', '!=', auth()->id())->get();
+        Notifier::send($staff, new CourseNotification('category', ['name' => $request->name_major], null, route('admin.categories.index')));
 
         return redirect()->route('admin.categories.index')->with('success', __('dash.saved_new'));
     }

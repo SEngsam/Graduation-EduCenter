@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Support\Notifier;
 use App\Scopes\UserAddedScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\CourseNotification;
 use Illuminate\Support\Facades\Auth;
 
 class Course extends Model
@@ -47,6 +49,18 @@ class Course extends Model
     public function slots()
     {
         return $this->hasMany(CourseSlot::class)->orderBy('day')->orderBy('starts_at');
+    }
+
+    public function notifyStudents($type, $params, $url)
+    {
+        $users = [];
+        foreach ($this->students()->with('user')->get() as $student) {
+            if ($student->user) {
+                $users[] = $student->user;
+            }
+        }
+
+        Notifier::send($users, new CourseNotification($type, $params, $this->title, $url));
     }
 
     public function isTaughtBy($user)

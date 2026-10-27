@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentCourseController;
 use App\Http\Controllers\Teach;
@@ -52,6 +53,10 @@ Route::put('/my/password', [StudentController::class, 'updatePassword'])->name('
 Route::get('/event',[SiteController::class, 'event'])->name('site.event');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 Route::post('/contact', [SiteController::class, 'contact_data'])->name('contact_data');
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::get('/notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
+Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+Route::put('/notifications/settings', [NotificationController::class, 'settings'])->name('notifications.settings');
 Route::get('/my/courses/{course}', [StudentCourseController::class, 'show'])->name('student.course');
 Route::post('/my/lessons/{lesson}/done', [StudentCourseController::class, 'toggleLesson'])->name('student.lesson.done');
 Route::get('/my/lessons/{lesson}/file', [StudentCourseController::class, 'lessonFile'])->name('student.lesson.file');

@@ -73,6 +73,10 @@ class CourseController extends Controller
 
         $lesson->save();
 
+        if ($lesson->is_published) {
+            $course->notifyStudents('lesson', ['title' => $lesson->title], route('student.course', $course->id));
+        }
+
         return back()->with('success', __('teach.lesson_added'));
     }
 

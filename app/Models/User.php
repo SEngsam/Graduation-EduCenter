@@ -42,6 +42,16 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'email_settings' => 'array',
+    ];
+
+    const EMAIL_TYPES = [
+        'grade' => true,
+        'assignment' => true,
+        'reminder' => true,
+        'absent' => true,
+        'lesson' => false,
+        'submission' => false,
     ];
 
 
@@ -85,6 +95,17 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->role && $this->role->abilities->contains('code', $code);
     }
+    public function wantsEmail($type)
+    {
+        $settings = $this->email_settings ?? [];
+
+        if (array_key_exists($type, $settings)) {
+            return (bool) $settings[$type];
+        }
+
+        return self::EMAIL_TYPES[$type] ?? false;
+    }
+
     public function studentProfile()
     {
         if ($this->student) {

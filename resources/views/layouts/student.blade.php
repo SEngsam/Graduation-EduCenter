@@ -26,6 +26,7 @@
       <a href="{{ route('student.dashboard') }}" class="{{ Route::is('student.dashboard') ? 'active' : '' }}">@include('includes.icon', ['name' => 'grid', 'size' => 20]) {{ __('site.my_dashboard') }}</a>
       <a href="{{ route('site.courses') }}">@include('includes.icon', ['name' => 'search', 'size' => 20]) {{ __('site.browse_courses') }}</a>
       <a href="{{ route('site.event') }}">@include('includes.icon', ['name' => 'calendar', 'size' => 20]) {{ __('site.events') }}</a>
+      @include('includes.nav-notifications')
       <a href="{{ route('student.profile') }}" class="{{ Route::is('student.profile') ? 'active' : '' }}">@include('includes.icon', ['name' => 'user', 'size' => 20]) {{ __('site.profile') }}</a>
       @endif
     </nav>

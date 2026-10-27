@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Teach;
 
+use App\Support\Notifier;
 use App\Models\Attendance;
 use App\Models\ClassSession;
 use App\Models\Course;
+use App\Notifications\CourseNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -68,10 +70,18 @@ class AttendanceController extends Controller
                 continue;
             }
 
-            Attendance::updateOrCreate(
-                ['class_session_id' => $session->id, 'student_id' => $studentId],
-                ['status' => $status, 'note' => $notes[$studentId] ?? null]
-            );
+            $attendance = Attendance::firstOrNew(['class_session_id' => $session->id, 'student_id' => $studentId]);
+            $wasAbsent = $attendance->exists && $attendance->status == 'absent';
+
+            $attendance->status = $status;
+            $attendance->note = $notes[$studentId] ?? null;
+            $attendance->save();
+
+            if ($status == 'absent' && !$wasAbsent && $attendance->student->user) {
+                Notifier::send($attendance->student->user, new CourseNotification('absent', [
+                    'date' => $session->starts_at->translatedFormat('l j F، g:i a'),
+                ], $course->title, route('student.course', $course->id)));
+            }
         }
 
         return redirect()

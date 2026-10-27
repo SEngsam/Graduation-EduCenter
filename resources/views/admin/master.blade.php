@@ -29,9 +29,9 @@
         @endif
       @endforeach
       @include('includes.theme-toggle')
-      <a class="icon-btn" href="{{ route('admin.index') }}" aria-label="{{ __('dash.notifications') }}">
+      <a class="icon-btn" href="{{ route('notifications.index') }}" aria-label="{{ __('dash.notifications') }}">
         @include('includes.icon', ['name' => 'bell', 'size' => 20])
-        @if ($unread = $me->unreadNotifications->count())
+        @if ($unread = $me->unreadNotifications()->count())
           <span class="count">{{ $unread }}</span>
         @endif
       </a>

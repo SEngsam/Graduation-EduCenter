@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\Notifier;
 use App\Models\Assignment;
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Notifications\CourseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -111,6 +113,14 @@ class StudentCourseController extends Controller
         $submission->file = $request->file('file')->store('submissions');
         $submission->original_name = $request->file('file')->getClientOriginalName();
         $submission->save();
+
+        $teacher = $assignment->course->teacher;
+        if ($teacher && $teacher->user) {
+            Notifier::send($teacher->user, new CourseNotification('submission', [
+                'name' => $student->name,
+                'title' => $assignment->title,
+            ], $assignment->course->title, route('teach.assignments', [$assignment->course_id, 'a' => $assignment->id, 'show' => 'pending'])));
+        }
 
         return back()->with('success', __('teach.submitted'));
     }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Teach;
 
+use App\Support\Notifier;
 use App\Models\Assignment;
 use App\Models\Course;
 use App\Models\Submission;
+use App\Notifications\CourseNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,6 +52,11 @@ class AssignmentController extends Controller
 
         $assignment = $course->assignments()->create($request->only('title', 'description', 'due_at', 'max_grade'));
 
+        $course->notifyStudents('assignment', [
+            'title' => $assignment->title,
+            'due' => $assignment->due_at->translatedFormat('l j F'),
+        ], route('student.course', $course->id));
+
         return redirect()
             ->route('teach.assignments', [$course->id, 'a' => $assignment->id])
             ->with('success', __('teach.assignment_added'));
@@ -81,6 +88,16 @@ class AssignmentController extends Controller
         $submission->feedback = $request->feedback;
         $submission->graded_at = now();
         $submission->save();
+
+        $assignment = $submission->assignment;
+        if ($submission->student->user) {
+            Notifier::send($submission->student->user, new CourseNotification('grade', [
+                'title' => $assignment->title,
+                'grade' => (float) $submission->grade,
+                'max' => $assignment->max_grade,
+                'feedback' => $submission->feedback,
+            ], $assignment->course->title, route('student.course', $assignment->course_id)));
+        }
 
         return back()->with('success', __('teach.graded_msg', ['name' => $submission->student->name]));
     }

@@ -9,6 +9,9 @@
     <h1>{{ __('teach.hello', ['name' => auth()->user()->name]) }}</h1>
     <p>{{ trans_choice('teach.today_summary', $today->count(), ['n' => $today->count()]) }}</p>
   </div>
+  <div class="title-actions">
+    @include('includes.bell')
+  </div>
 </div>
 
 <div class="stat-grid">
