@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ScheduleController;
@@ -68,6 +69,8 @@ Route::get('/my/courses/{course}/certificate', [CertificateController::class, 's
 Route::post('/my/lessons/{lesson}/done', [StudentCourseController::class, 'toggleLesson'])->name('student.lesson.done');
 Route::get('/my/lessons/{lesson}/file', [StudentCourseController::class, 'lessonFile'])->name('student.lesson.file');
 Route::post('/my/assignments/{assignment}/submit', [StudentCourseController::class, 'submit'])->name('student.assignment.submit');
+Route::get('/here', [CheckInController::class, 'show'])->name('attendance.here');
+Route::post('/here', [CheckInController::class, 'store'])->name('attendance.checkin');
 Route::get('/courses/{course}/discussion', [DiscussionController::class, 'index'])->name('discussion.index');
 Route::post('/courses/{course}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
 Route::post('/questions/{question}/replies', [DiscussionController::class, 'reply'])->name('discussion.reply');
@@ -86,6 +89,10 @@ Route::prefix('teach')->name('teach.')->middleware('teacher')->group(function ()
     Route::delete('/slots/{slot}', [Teach\CourseController::class, 'destroySlot'])->name('slots.destroy');
     Route::get('/courses/{course}/attendance', [Teach\AttendanceController::class, 'show'])->name('attendance');
     Route::post('/courses/{course}/attendance', [Teach\AttendanceController::class, 'store'])->name('attendance.store');
+    Route::post('/courses/{course}/qr', [Teach\QrController::class, 'open'])->name('qr.open');
+    Route::get('/sessions/{session}/qr', [Teach\QrController::class, 'show'])->name('qr');
+    Route::get('/sessions/{session}/qr/status', [Teach\QrController::class, 'status'])->name('qr.status');
+    Route::post('/sessions/{session}/qr/close', [Teach\QrController::class, 'close'])->name('qr.close');
     Route::get('/courses/{course}/assignments', [Teach\AssignmentController::class, 'index'])->name('assignments');
     Route::post('/courses/{course}/assignments', [Teach\AssignmentController::class, 'store'])->name('assignments.store');
     Route::delete('/assignments/{assignment}', [Teach\AssignmentController::class, 'destroy'])->name('assignments.destroy');

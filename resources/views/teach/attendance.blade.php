@@ -12,6 +12,13 @@
   <button class="btn btn-outline">{{ __('teach.open') }}</button>
 </form>
 
+<form method="POST" action="{{ route('teach.qr.open', $course) }}" id="qr-form">
+  @csrf
+  <input type="hidden" name="date" value="{{ $date }}">
+  <input type="hidden" name="time" value="{{ $time }}">
+  <input type="hidden" name="room" value="{{ $slot->room ?? '' }}">
+</form>
+
 <div class="split">
   <form method="POST" action="{{ route('teach.attendance.store', $course) }}" class="card split-main roster">
     @csrf
@@ -22,6 +29,7 @@
     @if ($students->count())
       <div class="roster-head">
         <button type="button" class="btn btn-outline btn-sm" id="all-present">@include('includes.icon', ['name' => 'check', 'size' => 16]) {{ __('teach.all_present') }}</button>
+        <button type="submit" form="qr-form" class="btn btn-dark btn-sm">@include('includes.icon', ['name' => 'qr', 'size' => 16]) {{ __('qr.start') }}</button>
       </div>
 
       <div class="table-scroll">

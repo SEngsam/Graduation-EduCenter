@@ -1181,3 +1181,41 @@ dialog.sheet .form-actions { display: flex; gap: 8px; justify-content: flex-end;
 .post-body p { margin: 6px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
 .post-delete { margin-inline-start: auto; }
 .link-btn { background: none; border: 0; padding: 0; font: inherit; font-size: 13px; color: var(--danger); cursor: pointer; text-decoration: underline; }
+
+.qr-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.qr-top h1 { font-size: 28px; margin-bottom: 6px; }
+.qr-top p { margin: 0; }
+.qr-actions { display: flex; gap: 8px; }
+.qr-board { padding: 36px; border-radius: 22px; background: var(--brand-navy); color: var(--ink-inverse); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; }
+.qr-scan { font-size: 20px; }
+.qr-box { padding: 18px; background: #fff; border-radius: 18px; line-height: 0; }
+.qr-box svg { width: 260px; height: 260px; }
+.qr-timer { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 340px; }
+.qr-timer .bar { flex: 1; height: 8px; background: var(--brand-navy-2); }
+.qr-timer .bar span { background: var(--brand-orange); transition: width 1s linear; }
+.qr-timer #timer-text { font-size: 14px; color: var(--ink-inverse-muted); }
+.qr-manual { font-size: 14px; color: var(--ink-inverse-muted); }
+.qr-manual strong { color: var(--ink-inverse); }
+.qr-manual .qr-code { font-family: 'Readex Pro', sans-serif; font-size: 22px; color: var(--brand-orange); letter-spacing: 4px; margin-inline-start: 6px; }
+.qr-board:fullscreen { border-radius: 0; }
+.qr-board:fullscreen .qr-box svg { width: 52vh; height: 52vh; }
+.qr-count { display: flex; justify-content: space-between; align-items: baseline; }
+.qr-count strong { font-family: 'Readex Pro', sans-serif; font-size: 28px; }
+.qr-count small { color: var(--ink-subtle); font-size: 16px; }
+.qr-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.qr-name { flex: 1; font-weight: 600; }
+.qr-row small { color: var(--ink-subtle); }
+.muted.small { font-size: 14px; line-height: 1.7; }
+
+.checkin { width: 100%; max-width: 440px; margin: 24px auto; }
+.checkin-card { align-items: center; text-align: center; }
+.checkin-card h1 { font-size: 26px; }
+.checkin-card p { margin: 0; line-height: 1.8; }
+.checkin-card .field, .checkin-card .btn, .checkin-info, .checkin-rate { align-self: stretch; }
+.checkin-icon { width: 96px; height: 96px; border-radius: 50%; background: var(--orange-soft); color: var(--orange-soft-ink); display: flex; align-items: center; justify-content: center; }
+.checkin-icon.done { background: var(--success-soft); color: var(--success); }
+.checkin-icon.done.late { background: var(--orange-soft); color: var(--orange-soft-ink); }
+.checkin-info { display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; }
+.checkin-rate { display: flex; justify-content: space-between; padding: 14px; border: 1px solid var(--line); border-radius: 14px; }
+.code-input { text-align: center; font-family: 'Readex Pro', sans-serif; font-size: 28px; letter-spacing: 6px; }
+.error-text { color: var(--danger); }
