@@ -17,13 +17,17 @@
   <aside class="app-side" aria-label="{{ __('site.menu') }}">
     <a class="brand" href="{{ route('site.index') }}">
       <span class="brand-mark" style="color:var(--on-orange)">@include('includes.icon', ['name' => 'cap'])</span>
-      <span class="brand-name"><strong>EduCenter</strong><small>{{ __('site.brand_sub') }}</small></span>
+      <span class="brand-name"><strong>EduCenter</strong><small>@yield('brand_sub', __('site.brand_sub'))</small></span>
     </a>
     <nav class="side-nav">
+      @hasSection('nav')
+        @yield('nav')
+      @else
       <a href="{{ route('student.dashboard') }}" class="{{ Route::is('student.dashboard') ? 'active' : '' }}">@include('includes.icon', ['name' => 'grid', 'size' => 20]) {{ __('site.my_dashboard') }}</a>
       <a href="{{ route('site.courses') }}">@include('includes.icon', ['name' => 'search', 'size' => 20]) {{ __('site.browse_courses') }}</a>
       <a href="{{ route('site.event') }}">@include('includes.icon', ['name' => 'calendar', 'size' => 20]) {{ __('site.events') }}</a>
       <a href="{{ route('student.profile') }}" class="{{ Route::is('student.profile') ? 'active' : '' }}">@include('includes.icon', ['name' => 'user', 'size' => 20]) {{ __('site.profile') }}</a>
+      @endif
     </nav>
     <div class="side-foot">
       <div class="side-tools">

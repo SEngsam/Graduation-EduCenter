@@ -23,6 +23,41 @@ class Course extends Model
     {
         return $this->belongsToMany(Student::class, 'registrations', 'course_id', 'student_id');
     }
+
+    public function enrolled()
+    {
+        return $this->students()->wherePivotNull('deleted_at');
+    }
+
+    public function units()
+    {
+        return $this->hasMany(CourseUnit::class)->orderBy('position')->orderBy('id');
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class)->orderBy('position')->orderBy('id');
+    }
+
+    public function sessions()
+    {
+        return $this->hasMany(ClassSession::class)->orderByDesc('starts_at');
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class)->orderBy('due_at');
+    }
+
+    public function slots()
+    {
+        return $this->hasMany(CourseSlot::class)->orderBy('day')->orderBy('starts_at');
+    }
+
+    public function isTaughtBy($user)
+    {
+        return $user && ($user->hasRole(Role::ROLE_ADMIN) || ($user->teacher && $this->teacher_id === $user->teacher->id));
+    }
    
     public function createdBy(){
         return $this->belongsTo(User::class, 'user_id');

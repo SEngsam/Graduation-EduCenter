@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             AboutsTableSeeder::class,
             RegistrationsTableSeeder::class,
             NewsTableSeeder::class,
+            AcademicSeeder::class,
           
         ]);
     }

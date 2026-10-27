@@ -11,11 +11,14 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    // Old /home link: send everyone to the page that fits their role
     public function index()
     {
         if (auth()->user()->hasRole(Role::ROLE_STUDENT)) {
             return redirect()->route('student.dashboard');
+        }
+
+        if (auth()->user()->hasRole(Role::ROLE_TEACHER)) {
+            return redirect()->route('teach.dashboard');
         }
 
         return redirect()->route('admin.index');

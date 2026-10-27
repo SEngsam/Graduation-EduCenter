@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\News;
+use App\Models\Assignment;
+use App\Models\CourseSlot;
+use App\Models\Lesson;
 use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\Request;
@@ -14,7 +16,8 @@ class StudentController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        $studentId = $user->student->id ?? $user->id;
+        $student = $user->student;
+        $studentId = $student ? $student->id : $user->id;
 
         $courses = Registration::where('student_id', $studentId)
             ->with('course.teacher.category')
@@ -23,15 +26,56 @@ class StudentController extends Controller
             ->pluck('course')
             ->filter();
 
-        $events = Event::orderByDesc('id')->take(3)->get();
-        $news = News::orderByDesc('id')->take(3)->get();
+        $courseIds = $courses->pluck('id');
 
-        return view('student.dashboard', [
-            'courses' => $courses,
-            'events' => $events,
-            'news' => $news,
-            'teachersCount' => $courses->pluck('teacher_id')->filter()->unique()->count(),
-        ]);
+        $todayClasses = CourseSlot::with('course')
+            ->whereIn('course_id', $courseIds)
+            ->where('day', now()->dayOfWeek)
+            ->orderBy('starts_at')
+            ->get();
+
+        $upcoming = collect();
+        $attendanceRate = null;
+        $average = null;
+        $progress = [];
+
+        if ($student) {
+            $handedIn = $student->submissions()->pluck('assignment_id');
+
+            $upcoming = Assignment::with('course')
+                ->whereIn('course_id', $courseIds)
+                ->where('due_at', '>', now())
+                ->whereNotIn('id', $handedIn)
+                ->orderBy('due_at')
+                ->get();
+
+            $statuses = $student->attendances()->pluck('status');
+            if (count($statuses) > 0) {
+                $came = $statuses->filter(function ($status) {
+                    return $status == 'present' || $status == 'late';
+                })->count();
+                $attendanceRate = round($came * 100 / count($statuses));
+            }
+
+            $graded = $student->submissions()->whereNotNull('grade')->with('assignment')->get();
+            if (count($graded) > 0) {
+                $total = 0;
+                foreach ($graded as $submission) {
+                    $total += $submission->grade * 20 / $submission->assignment->max_grade;
+                }
+                $average = round($total / count($graded), 1);
+            }
+
+            foreach ($courses as $course) {
+                $lessonIds = Lesson::where('course_id', $course->id)->where('is_published', true)->pluck('id');
+                $doneCount = $student->completedLessons()->whereIn('lessons.id', $lessonIds)->count();
+                $progress[$course->id] = count($lessonIds) ? round($doneCount * 100 / count($lessonIds)) : 0;
+            }
+        }
+
+        $events = Event::orderByDesc('id')->take(3)->get();
+
+        return view('student.dashboard', compact('courses', 'todayClasses', 'upcoming', 'attendanceRate', 'average', 'progress', 'events'));
     }
 
     public function profile()

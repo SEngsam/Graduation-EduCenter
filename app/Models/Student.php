@@ -20,6 +20,21 @@ class Student extends Model
         return $this->belongsToMany(Course::class, 'registrations', 'student_id', 'course_id');
     }
 
+    public function completedLessons()
+    {
+        return $this->belongsToMany(Lesson::class)->withTimestamps();
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
+
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);

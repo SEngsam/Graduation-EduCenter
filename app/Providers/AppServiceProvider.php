@@ -35,5 +35,10 @@ class AppServiceProvider extends ServiceProvider
         View::composer('admin.*', function ($view) {
             $view->with('me', auth()->user());
         });
+
+        View::composer('layouts.teacher', function ($view) {
+            $teacher = optional(auth()->user())->teacher;
+            $view->with('navCourses', $teacher ? \App\Models\Course::where('teacher_id', $teacher->id)->orderBy('title')->get(['id', 'title']) : collect());
+        });
     }
 }

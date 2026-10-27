@@ -33,9 +33,15 @@ class LoginController extends Controller
     {
         $user = auth()->user();
 
-        return $user && $user->hasRole(Role::ROLE_STUDENT)
-            ? route('student.dashboard')
-            : RouteServiceProvider::HOME;
+        if ($user && $user->hasRole(Role::ROLE_STUDENT)) {
+            return route('student.dashboard');
+        }
+
+        if ($user && $user->hasRole(Role::ROLE_TEACHER)) {
+            return route('teach.dashboard');
+        }
+
+        return RouteServiceProvider::HOME;
     }
 
     /**

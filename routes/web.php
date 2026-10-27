@@ -5,6 +5,8 @@ use App\Events\Category1Notification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentCourseController;
+use App\Http\Controllers\Teach;
 use App\Http\Controllers\Admin\NewController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -61,6 +63,29 @@ Route::put('/my/password', [StudentController::class, 'updatePassword'])->name('
 Route::get('/event',[SiteController::class, 'event'])->name('site.event');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 Route::post('/contact', [SiteController::class, 'contact_data'])->name('contact_data');
+Route::get('/my/courses/{course}', [StudentCourseController::class, 'show'])->name('student.course');
+Route::post('/my/lessons/{lesson}/done', [StudentCourseController::class, 'toggleLesson'])->name('student.lesson.done');
+Route::get('/my/lessons/{lesson}/file', [StudentCourseController::class, 'lessonFile'])->name('student.lesson.file');
+Route::post('/my/assignments/{assignment}/submit', [StudentCourseController::class, 'submit'])->name('student.assignment.submit');
+
+Route::prefix('teach')->name('teach.')->middleware('teacher')->group(function () {
+    Route::get('/', [Teach\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/courses/{course}', [Teach\CourseController::class, 'show'])->name('course');
+    Route::post('/courses/{course}/units', [Teach\CourseController::class, 'storeUnit'])->name('units.store');
+    Route::delete('/units/{unit}', [Teach\CourseController::class, 'destroyUnit'])->name('units.destroy');
+    Route::post('/courses/{course}/lessons', [Teach\CourseController::class, 'storeLesson'])->name('lessons.store');
+    Route::patch('/lessons/{lesson}/publish', [Teach\CourseController::class, 'togglePublish'])->name('lessons.publish');
+    Route::delete('/lessons/{lesson}', [Teach\CourseController::class, 'destroyLesson'])->name('lessons.destroy');
+    Route::post('/courses/{course}/slots', [Teach\CourseController::class, 'storeSlot'])->name('slots.store');
+    Route::delete('/slots/{slot}', [Teach\CourseController::class, 'destroySlot'])->name('slots.destroy');
+    Route::get('/courses/{course}/attendance', [Teach\AttendanceController::class, 'show'])->name('attendance');
+    Route::post('/courses/{course}/attendance', [Teach\AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/courses/{course}/assignments', [Teach\AssignmentController::class, 'index'])->name('assignments');
+    Route::post('/courses/{course}/assignments', [Teach\AssignmentController::class, 'store'])->name('assignments.store');
+    Route::delete('/assignments/{assignment}', [Teach\AssignmentController::class, 'destroy'])->name('assignments.destroy');
+    Route::put('/submissions/{submission}', [Teach\AssignmentController::class, 'grade'])->name('submissions.grade');
+    Route::get('/submissions/{submission}/file', [Teach\AssignmentController::class, 'download'])->name('submissions.file');
+});
 
 });
 

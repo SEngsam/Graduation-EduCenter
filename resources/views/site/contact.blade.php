@@ -37,15 +37,17 @@
   <aside class="info-card">
     <h2>{{ __('site.contact_info') }}</h2>
     @php
-      $info = array_filter([
-          ['pin', __('site.address'), config('site.address'), null],
+      $info = [
+          ['pin', __('site.address'), config('site.address'), ''],
           ['phone', __('site.tel'), config('site.phone'), 'ltr'],
-          ['mail', __('site.email'), config('site.email') ?: config('mail.from.address'), null],
-          ['clock', __('site.hours'), config('site.hours'), null],
-      ], fn ($row) => filled($row[2]));
+          ['mail', __('site.email'), config('site.email') ?: config('mail.from.address'), ''],
+          ['clock', __('site.hours'), config('site.hours'), ''],
+      ];
     @endphp
-    @foreach ($info as [$icon, $label, $value, $dir])
-      <div class="info-row"><span class="ic">@include('includes.icon', ['name' => $icon])</span><div><small>{{ $label }}</small><strong @if ($dir) dir="{{ $dir }}" @endif>{{ $value }}</strong></div></div>
+    @foreach ($info as $row)
+      @if ($row[2])
+        <div class="info-row"><span class="ic">@include('includes.icon', ['name' => $row[0]])</span><div><small>{{ $row[1] }}</small><strong @if ($row[3]) dir="ltr" @endif>{{ $row[2] }}</strong></div></div>
+      @endif
     @endforeach
   </aside>
 </div>
