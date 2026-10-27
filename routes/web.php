@@ -78,29 +78,28 @@ Route::prefix('teach')->name('teach.')->middleware('teacher')->group(function ()
 
 });
 
-Route::prefix(LaravelLocalization::setLocale())->group(function(){
-    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+Route::prefix(LaravelLocalization::setLocale())->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
-        Route::resource('categories', CategoryController::class)->middleware('ability:all_categories');
-        Route::resource('courses', CourseController::class);//->middleware('ability:all_courses');
-        Route::resource('teachers',  TeacherController::class)->middleware('ability:all_teachers');
-      Route::post('courses/assignTeacher', [CourseController::class, 'assignTeacher'])->name('courses.assignTeacher');
 
-        Route::resource('abouts',  AboutController::class)->middleware('ability:all_abouts');
-        Route::resource('events', EventController::class)->middleware('ability:all_events');
-        Route::resource('news',  NewController::class)->middleware('ability:all_newss');
-        Route::get('users', [UserController::class, 'index'])->name('users.index')->middleware('ability:all_users');
-        Route::get('users/create', [UserController::class, 'create'])->name('users.create')->middleware('ability:add_user');
-        Route::post('users/store', [UserController::class, 'store'])->name('users.store')->middleware('ability:add_user');
-        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update')->middleware('ability:edit_user');
-        Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy')->middleware('ability:delete_user');
+        Route::resource('categories', CategoryController::class)->except('show');
+        Route::resource('courses', CourseController::class)->except('show');
+        Route::post('courses/assignTeacher', [CourseController::class, 'assignTeacher'])->name('courses.assignTeacher');
+        Route::resource('teachers', TeacherController::class)->except('show');
+        Route::resource('abouts', AboutController::class)->except('show');
+        Route::resource('events', EventController::class)->except('show');
+        Route::resource('news', NewController::class)->except('show');
+        Route::resource('roles', RoleController::class)->except('show');
 
-        Route::resource('roles', RoleController::class)->middleware('ability:all_users');
-        Route::get('messages', [MessageController::class, 'index'])->name('messages.index')->middleware('ability:all_users');
-        Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy')->middleware('ability:all_users');
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('users/store', [UserController::class, 'store'])->name('users.store');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
+        Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+        Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
     });
-
-    });
+});
 
 Route::view('not_allowed', 'not_allowed');

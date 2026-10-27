@@ -133,4 +133,7 @@ return [
     'major' => 'Field',
     'new' => 'New',
     'no_messages' => 'No messages yet.',
+    'role_built_in' => 'This is a built-in role and cannot be deleted.',
+    'role_in_use' => 'Some users still have this role. Change their role first.',
+    'cannot_delete_self' => 'You cannot delete the account you are signed in with.',
 ];

@@ -79,6 +79,10 @@ class User extends Authenticatable implements JWTSubject
     }
     public function hasAbility($code)
     {
+        if ($this->role_id == Role::ROLE_ADMIN) {
+            return true;
+        }
+
         return $this->role && $this->role->abilities->contains('code', $code);
     }
     public function studentProfile()

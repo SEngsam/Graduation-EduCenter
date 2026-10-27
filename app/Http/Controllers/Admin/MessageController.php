@@ -7,6 +7,11 @@ use App\Models\ContactMessage;
 
 class MessageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ability:all_users');
+    }
+
     public function index()
     {
         $messages = ContactMessage::latest()->paginate(15);

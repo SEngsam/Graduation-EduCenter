@@ -3,9 +3,6 @@
 namespace App\Http;
 //use App\Http\Middleware\Authenticate;
 
-use App\Http\Middleware\CheckPassord;
-use App\Http\Middleware\ChangeLanguage;
-use App\Http\Middleware\CheckAdminToken;
 use App\Http\Middleware\checkType;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -79,9 +76,6 @@ class Kernel extends HttpKernel
 
         // 'user_type' => \App\Http\Middleware\CheckUser::class
 
-        'CheckPassord' => CheckPassord::class,
-        'ChangeLanguage' => ChangeLanguage::class,
-        'CheckAdminToken'=> CheckAdminToken::class,
         'ability' => \App\Http\Middleware\CheckAbility::class,
         'teacher' => \App\Http\Middleware\EnsureTeacher::class,
     ];

@@ -2,155 +2,97 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Gate;
 
 class NewController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ability:all_newss')->only('index');
+        $this->middleware('ability:add_news')->only(['create', 'store']);
+        $this->middleware('ability:edit_news')->only(['edit', 'update']);
+        $this->middleware('ability:delete_news')->only('destroy');
+    }
+
     public function index()
     {
-        Gate::authorize('all_newss');
-        $n = News::orderByDesc('id')->paginate(5);
+        $n = News::orderByDesc('id')->paginate(10);
+
         return view('admin.news.index', compact('n'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-       $n = News::all();
-        return view('admin.news.create', compact('n'));
+        return view('admin.news.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required',
-            'date' => 'required',
-            'auther' => 'required',
-            'title' => 'required',
-            'description' => 'required',
-            'btn_text' => 'required',
-            'btn_link' => 'required',
+            'date' => 'required|date',
+            'auther' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'btn_text' => 'required|string|max:255',
+            'btn_link' => 'required|string|max:255',
+            'image' => 'required|image|max:2048',
         ]);
 
-        $img = $request->file('image');
-       $img_name = rand() . time() . $img->getClientOriginalName();
-       $img->move(public_path('uploads/news'), $img_name);
+        News::create([
+            'date' => $request->date,
+            'auther' => $request->auther,
+            'title' => $request->title,
+            'description' => $request->description,
+            'btn_text' => $request->btn_text,
+            'btn_link' => $request->btn_link,
+            'image' => $this->saveImage($request, 'news'),
+        ]);
 
-      News::create([
-        'image' => $img_name,
-       'date' => $request->date,
-       'auther' => $request->auther,
-        'title' => $request->title,
-        'description' => $request->description,
-        'btn_text' => $request->btn_text,
-        'btn_link' => $request->btn_link,
-
-    ]);
-
-    return redirect()->route('admin.news.index')->with('msg', __('dash.saved_new'))->with('type', 'success');
-
-
-
+        return redirect()->route('admin.news.index')->with('success', __('dash.saved_new'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-
-        $n = News::all();
         $new = News::findOrFail($id);
-        return view('admin.news.edit', compact('n','new'));
+
+        return view('admin.news.edit', compact('new'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            //'image' => 'required',
-            'date' => 'required',
-            'auther' => 'required',
-            'title' => 'required',
-            'description' => 'required',
-            'btn_text' => 'required',
-            'btn_link' => 'required',
-        ]);
-
-
         $new = News::findOrFail($id);
 
-        $img_name = $new->image;
-        if($request->hasFile('image')) {
-           $img_name = rand() . time() . $request->file('image')->getClientOriginalName();
-          $request->file('image')->move(public_path('uploads/news'), $img_name);
-       }
+        $request->validate([
+            'date' => 'required|date',
+            'auther' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'btn_text' => 'required|string|max:255',
+            'btn_link' => 'required|string|max:255',
+            'image' => 'nullable|image|max:2048',
+        ]);
 
-       $new->update([
-        'image' => $img_name,
-       'date' => $request->date,
-       'auther' => $request->auther,
-        'title' => $request->title,
-        'description' => $request->description,
-        'btn_text' => $request->btn_text,
-        'btn_link' => $request->btn_link,
+        $new->update([
+            'date' => $request->date,
+            'auther' => $request->auther,
+            'title' => $request->title,
+            'description' => $request->description,
+            'btn_text' => $request->btn_text,
+            'btn_link' => $request->btn_link,
+            'image' => $this->saveImage($request, 'news', $new->image),
+        ]);
 
-
-    ]);
-
-    return redirect()->route('admin.news.index')->with('msg', __('dash.saved'))->with('type', 'info');
-
-
-
+        return redirect()->route('admin.news.index')->with('success', __('dash.saved'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $new = News::findOrFail($id);
-        File::delete(public_path('uploads/news/'.$new->image));
-
+        $this->deleteImage('news', $new->image);
         $new->delete();
 
-        return redirect()->route('admin.news.index')->with('msg', __('dash.deleted'))->with('type', 'danger');
+        return redirect()->route('admin.news.index')->with('success', __('dash.deleted'));
     }
 }

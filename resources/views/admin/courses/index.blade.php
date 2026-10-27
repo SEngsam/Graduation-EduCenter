@@ -10,7 +10,7 @@
     <h1>{{ __('dash.courses') }}</h1>
     <p>{{ __('dash.courses_sub') }}</p>
   </div>
-  @if ($user->hasAbility('add_course'))
+  @if ($me->hasAbility('add_course'))
     <div class="actions"><a href="{{ route('admin.courses.create') }}" class="btn btn-primary">@include('includes.icon', ['name' => 'plus', 'size' => 18]) {{ __('dash.new_course') }}</a></div>
   @endif
 </div>
@@ -46,10 +46,10 @@
             <td>
               @if ($course->teacher)
                 {{ $course->teacher->name }}
-                @if ($user->hasAbility('assign_teacher'))
+                @if ($me->hasAbility('assign_teacher'))
                   <button type="button" class="missing" style="border:0;padding:2px 6px" data-assign="{{ $course->id }}" data-title="{{ $course->title }}" data-teacher="{{ $course->teacher_id }}">{{ __('dash.edit') }}</button>
                 @endif
-              @elseif ($user->hasAbility('assign_teacher'))
+              @elseif ($me->hasAbility('assign_teacher'))
                 <button type="button" class="missing" data-assign="{{ $course->id }}" data-title="{{ $course->title }}">+ {{ __('dash.assign_teacher') }}</button>
               @else
                 <span class="muted">{{ __('dash.no_teacher') }}</span>
@@ -59,8 +59,8 @@
             <td>
               @include('admin.partials.row-actions', [
                 'label' => $course->title,
-                'edit' => $user->hasAbility('edit_course') ? route('admin.courses.edit', $course->id) : null,
-                'destroy' => $user->hasAbility('delete_course') ? route('admin.courses.destroy', $course->id) : null,
+                'edit' => $me->hasAbility('edit_course') ? route('admin.courses.edit', $course->id) : null,
+                'destroy' => $me->hasAbility('delete_course') ? route('admin.courses.destroy', $course->id) : null,
               ])
             </td>
           </tr>
@@ -73,7 +73,7 @@
   @include('admin.partials.table-foot', ['items' => $courses])
 </section>
 
-@if ($user->hasAbility('assign_teacher'))
+@if ($me->hasAbility('assign_teacher'))
   <dialog class="sheet" id="assignDialog" aria-labelledby="assignTitle">
     <form action="{{ route('admin.courses.assignTeacher') }}" method="POST">
       @csrf

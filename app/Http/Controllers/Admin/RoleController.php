@@ -3,159 +3,80 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Ability;
 use App\Models\Role;
-
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    private $builtIn = [Role::ROLE_ADMIN, Role::ROLE_TEACHER, Role::ROLE_STUDENT];
+
+    public function __construct()
+    {
+        $this->middleware('ability:all_roles');
+    }
+
     public function index()
     {
-        $roles = Role::paginate(10);
+        $roles = Role::withCount('abilities')->paginate(10);
+
         return view('admin.roles.index', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $abilities = Ability::all();
+
         return view('admin.roles.create', compact('abilities'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|string|max:255|unique:roles,name',
+            'ability' => 'nullable|array',
+            'ability.*' => 'exists:abilities,id',
         ]);
 
-        $role = Role::create([
-            'name' => $request->name
-        ]);
+        $role = Role::create(['name' => $request->name]);
+        $role->abilities()->attach($request->input('ability', []));
 
-        $role->abilities()->attach($request->ability);
-
-        return redirect()->route('admin.roles.index')->with('msg', __('dash.saved_new'));
+        return redirect()->route('admin.roles.index')->with('success', __('dash.saved_new'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Role $role)
     {
-        // $role = Role::findOrFail($id);
         $abilities = Ability::all();
+
         return view('admin.roles.edit', compact('abilities', 'role'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|string|max:255|unique:roles,name,' . $role->id,
+            'ability' => 'nullable|array',
+            'ability.*' => 'exists:abilities,id',
         ]);
 
-        $role->update([
-            'name' => $request->name
-        ]);
+        $role->update(['name' => $request->name]);
+        $role->abilities()->sync($request->input('ability', []));
 
-        $role->abilities()->sync($request->ability);
-
-        return redirect()->route('admin.roles.index')->with('msg', __('dash.saved'));
+        return redirect()->route('admin.roles.index')->with('success', __('dash.saved'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // public function destroy($id)
-    // {
-    //     $roles = Role::findOrFail($id);
-    //     $roles->delete();
-    //     return view('admin.roles.index', compact('roles'));
-    // }
-
-    public function destroy($id)
-{
-    $role = Role::find($id);
-
-    if (!$role) {
-        return redirect()->route('admin.roles.index')->with([
-            'type' => 'danger',
-            'msg' => 'Role not found.'
-        ]);
-    }
-
-    $role->delete();
-
-    return redirect()->route('admin.roles.index')->with([
-        'type' => 'success',
-        'msg' => 'Role deleted successfully.'
-    ]);
-}
-
-    /**
-     * Display a trashed listing of the resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function trash()
+    public function destroy(Role $role)
     {
-        //
-    }
+        if (in_array($role->id, $this->builtIn)) {
+            return back()->with('error', __('dash.role_built_in'));
+        }
 
-    /**
-     * Restore the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function restore($id)
-    {
-        //
-    }
+        if ($role->users()->exists()) {
+            return back()->with('error', __('dash.role_in_use'));
+        }
 
-    /**
-     * forcedelete the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function forcedelete($id)
-    {
-        //
+        $role->delete();
+
+        return redirect()->route('admin.roles.index')->with('success', __('dash.deleted'));
     }
 }
