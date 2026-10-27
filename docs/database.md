@@ -31,6 +31,15 @@ erDiagram
 
     users |o--o{ contact_messages : "user_id"
 
+    students ||--o{ certificates : ""
+    courses ||--o{ certificates : "شهادات"
+
+    courses ||--o{ course_questions : "نقاش"
+    lessons |o--o{ course_questions : "lesson_id"
+    users ||--o{ course_questions : "سأل"
+    course_questions ||--o{ question_replies : "ردود"
+    users ||--o{ question_replies : ""
+
     users {
         int id PK
         string name
@@ -92,6 +101,8 @@ erDiagram
         int course_id FK
         datetime starts_at
         string room
+        string qr_secret
+        bool qr_open
     }
     attendances {
         int id PK
@@ -115,6 +126,28 @@ erDiagram
         decimal grade
         text feedback
     }
+    certificates {
+        int id PK
+        int student_id FK
+        int course_id FK
+        string code "EC-2026-XXXXXX"
+        decimal grade
+        int attendance
+    }
+    course_questions {
+        int id PK
+        int course_id FK
+        int lesson_id FK
+        int user_id FK
+        string title
+        text body
+    }
+    question_replies {
+        int id PK
+        int course_question_id FK
+        int user_id FK
+        text body
+    }
 ```
 
 ## ملاحظات على التصميم
@@ -127,3 +160,6 @@ erDiagram
 - **المواعيد والتعارض:** كل موعد أسبوعي للكورس إلو صف بجدول `course_slots` (اليوم، البداية، النهاية، القاعة). موعدين بيتعارضوا إذا كانوا بنفس اليوم، وبداية كل واحد قبل نهاية التاني. هيك منفحص قبل ما يتسجّل الطالب بكورس، وقبل ما المدرّس يضيف موعد.
 - **الإشعارات:** محفوظة بجدول `notifications` الجاهز من Laravel. كل إشعار فيه نوعه، ومعلوماته، ورابط بيفتح الصفحة المناسبة. إعدادات الإيميل لكل مستخدم محفوظة بعمود `users.email_settings`. وعمود `assignments.reminded_at` بيمنع إنه التذكير ينبعت مرتين.
 - **نسبة التقدّم:** هي عدد الدروس المنشورة اللي الطالب علّم عليها بجدول `lesson_student`، مقسوم على عدد كل الدروس المنشورة بالكورس.
+- **الشهادة:** بتنعمل أول مرة الطالب بيفتحها إذا كان مستحقها: خلّص كل الدروس المنشورة، وحضوره 75٪ أو أكتر، ومعدّل علاماته 12 من 20 أو أكتر. منخزّن معها النسبة والمعدل وقت ما انعملت، حتى ما يتغيّر شي بالشهادة إذا تعدّلت العلامات بعدين. الكود `code` فريد، وصفحة `/verify/{code}` بتدوّر عليه. على الجدول قيد `unique (student_id, course_id)`.
+- **النقاش:** السؤال مربوط بالكورس، وممكن يكون عن درس معيّن (`lesson_id`) أو عام. السؤال والرد مربوطين بـ `users.id` مش بـ `students.id`، لأن المدرّس كمان بيكتب ردود. إذا انحذف السؤال بتنحذف ردوده معه (`cascadeOnDelete`).
+- **الحضور بالـ QR:** لما المدرّس يفتح الحضور بالـ QR، بيتولّد للحصة `qr_secret` عشوائي، وبيصير `qr_open = true`. الرقم اللي على الشاشة بينحسب من `hash_hmac(الحصة + رقم الدقيقة، qr_secret)`، يعني ما في داعي نخزّن الأرقام بالقاعدة. منقبل رقم الدقيقة الحالية والدقيقة اللي قبلها، حتى ما يضيع الطالب اللي مسح بآخر ثانية. لما ينتهي الحضور بيرجع `qr_open = false`، والطلاب اللي ما سجّلوا بينكتبلهم صف `absent` بجدول `attendances`.
