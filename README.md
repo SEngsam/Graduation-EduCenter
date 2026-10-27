@@ -12,7 +12,7 @@
 
 ## التقنيات
 
-- Laravel 10 و PHP 8.1 أو أحدث
+- Laravel 12 و PHP 8.2 أو أحدث
 - MySQL، أو SQLite للتجربة السريعة
 - Blade و CSS عادي. الألوان والمسافات معرّفة كمتغيرات بملف `public/css/tokens.css`
 - `mcamara/laravel-localization` للغتين بلوحة التحكم
