@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
@@ -35,6 +36,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 Auth::routes();
 
 Route::get('/',[SiteController::class, 'index'])->name('site.index');
+Route::get('/verify/{code?}', [CertificateController::class, 'verify'])->name('certificate.verify');
 Route::get('/lang/{locale}', function ($locale) {
     abort_unless(in_array($locale, ['ar', 'en']), 404);
     session(['locale' => $locale]);
@@ -61,6 +63,7 @@ Route::get('/notifications/{id}', [NotificationController::class, 'open'])->name
 Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
 Route::put('/notifications/settings', [NotificationController::class, 'settings'])->name('notifications.settings');
 Route::get('/my/courses/{course}', [StudentCourseController::class, 'show'])->name('student.course');
+Route::get('/my/courses/{course}/certificate', [CertificateController::class, 'show'])->name('certificate.show');
 Route::post('/my/lessons/{lesson}/done', [StudentCourseController::class, 'toggleLesson'])->name('student.lesson.done');
 Route::get('/my/lessons/{lesson}/file', [StudentCourseController::class, 'lessonFile'])->name('student.lesson.file');
 Route::post('/my/assignments/{assignment}/submit', [StudentCourseController::class, 'submit'])->name('student.assignment.submit');

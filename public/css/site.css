@@ -1144,3 +1144,25 @@ dialog.sheet .form-actions { display: flex; gap: 8px; justify-content: flex-end;
 .week-block.tone-sci { background: var(--cat-science-soft); color: var(--cat-science); }
 .week-block.tone-art { background: var(--cat-arts-soft); color: var(--cat-arts); }
 .week-block.tone-tech { background: var(--cat-tech-soft); color: var(--cat-tech); }
+
+/* certificates */
+.verify-wrap { display: flex; justify-content: center; padding-bottom: 72px; }
+.verify-card { width: 100%; max-width: 520px; padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.verify-card h2 { font-size: 26px; }
+.verify-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.verify-icon.ok { background: var(--success-soft); color: var(--success); }
+.verify-icon.bad { background: var(--danger-soft); color: var(--danger); }
+.verify-list { align-self: stretch; margin: 8px 0 0; }
+.verify-list div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.verify-list dt { color: var(--ink-subtle); }
+.verify-list dd { margin: 0; font-weight: 600; }
+.verify-form { align-self: stretch; display: flex; gap: 8px; margin-top: 8px; }
+.verify-form input { flex: 1; min-width: 0; min-height: 48px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 10px; font: inherit; background: var(--surface-card); color: var(--ink); }
+.cert-card .rule { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.cert-card .rule-mark { flex: none; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface-sunken); color: var(--ink-subtle); }
+.cert-card .rule-mark.ok { background: var(--success); color: var(--surface-card); }
+.cert-card .rule span:last-child { display: flex; flex-direction: column; }
+.cert-card .rule small { color: var(--ink-subtle); }
+.cert-ready { background: var(--brand-navy); color: var(--ink-inverse); border: 0; }
+.cert-ready h2 { color: var(--ink-inverse); }
+.cert-ready p { color: var(--ink-inverse-muted); margin: 0; }

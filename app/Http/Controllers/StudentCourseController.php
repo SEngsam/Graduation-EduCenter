@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Support\Notifier;
 use App\Models\Assignment;
+use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Notifications\CourseNotification;
@@ -60,7 +61,10 @@ class StudentCourseController extends Controller
         $sessionIds = $course->sessions()->pluck('id');
         $attendance = $student->attendances()->whereIn('class_session_id', $sessionIds)->pluck('status');
 
-        return view('student.course', compact('course', 'units', 'loose', 'done', 'progress', 'next', 'assignments', 'submissions', 'upcoming', 'attendance'));
+        $certProgress = Certificate::progressFor($student, $course);
+        $certificate = Certificate::where('student_id', $student->id)->where('course_id', $course->id)->first();
+
+        return view('student.course', compact('course', 'units', 'loose', 'done', 'progress', 'next', 'assignments', 'submissions', 'upcoming', 'attendance', 'certProgress', 'certificate'));
     }
 
     public function toggleLesson(Lesson $lesson)

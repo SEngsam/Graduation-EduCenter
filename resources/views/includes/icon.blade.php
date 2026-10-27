@@ -88,5 +88,14 @@
     @case('download')
         <path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>
         @break
+    @case('lock')
+        <rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>
+        @break
+    @case('message')
+        <path d="M4 5h16v11H8l-4 4V5z"/>
+        @break
+    @case('qr')
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3z"/><path d="M20 14v1"/><path d="M14 20h1"/><path d="M18 18h3v3"/>
+        @break
 @endswitch
 </svg>

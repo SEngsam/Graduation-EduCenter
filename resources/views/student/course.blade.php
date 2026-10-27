@@ -116,6 +116,32 @@
       </form>
     @endif
 
+    @if ($certificate || $certProgress['eligible'])
+      <section class="card panel cert-ready">
+        <span class="icon-box">@include('includes.icon', ['name' => 'cap', 'size' => 24])</span>
+        <h2>{{ __('cert.ready_title') }}</h2>
+        <p>{{ __('cert.ready_text', ['course' => $course->title]) }}</p>
+        <a href="{{ route('certificate.show', $course->id) }}" class="btn btn-primary">@include('includes.icon', ['name' => 'download', 'size' => 18]) {{ __('cert.download') }}</a>
+      </section>
+    @else
+      <section class="card panel cert-card">
+        <h2>{{ __('cert.card_title') }}</h2>
+        <div class="rule">
+          <span class="rule-mark {{ $certProgress['lessons_ok'] ? 'ok' : '' }}">@include('includes.icon', ['name' => 'check', 'size' => 14])</span>
+          <span><strong>{{ __('cert.rule_lessons') }}</strong><small>{{ __('cert.rule_lessons_value', ['done' => $certProgress['lessons_done'], 'total' => $certProgress['lessons_total']]) }}</small></span>
+        </div>
+        <div class="rule">
+          <span class="rule-mark {{ $certProgress['attendance_ok'] ? 'ok' : '' }}">@include('includes.icon', ['name' => 'check', 'size' => 14])</span>
+          <span><strong>{{ __('cert.rule_attendance', ['min' => \App\Models\Certificate::MIN_ATTENDANCE]) }}</strong><small>{{ $certProgress['attendance'] !== null ? $certProgress['attendance'] . '٪' : __('cert.no_data') }}</small></span>
+        </div>
+        <div class="rule">
+          <span class="rule-mark {{ $certProgress['grade_ok'] ? 'ok' : '' }}">@include('includes.icon', ['name' => 'check', 'size' => 14])</span>
+          <span><strong>{{ __('cert.rule_grade', ['min' => \App\Models\Certificate::MIN_GRADE]) }}</strong><small dir="ltr" style="text-align:start">{{ $certProgress['grade'] !== null ? $certProgress['grade'] . ' / 20' : __('cert.no_data') }}</small></span>
+        </div>
+        <button type="button" class="btn btn-outline" disabled>@include('includes.icon', ['name' => 'lock', 'size' => 16]) {{ __('cert.locked') }}</button>
+      </section>
+    @endif
+
     <section class="card panel">
       <h2>{{ __('site.my_attendance') }}</h2>
       @if ($attendanceRate !== null)
