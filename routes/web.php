@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -101,6 +102,10 @@ Route::prefix(LaravelLocalization::setLocale())->group(function () {
         Route::post('users/store', [UserController::class, 'store'])->name('users.store');
         Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/print', [ReportController::class, 'print'])->name('reports.print');
+        Route::get('reports/export', [ReportController::class, 'export'])->name('reports.export');
 
         Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
         Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');

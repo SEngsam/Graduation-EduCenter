@@ -225,3 +225,5 @@ a.stat:hover { border-color: var(--brand-orange); }
   .admin-side .admin-nav, .admin-side .side-bottom { display: none; }
   .admin-side.open .admin-nav, .admin-side.open .side-bottom { display: flex; }
 }
+.admin-title .actions form { margin: 0; }
+.admin-title .select { min-height: 44px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface-card); color: var(--ink); font: inherit; }

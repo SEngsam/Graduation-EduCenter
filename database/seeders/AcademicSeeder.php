@@ -78,6 +78,11 @@ class AcademicSeeder extends Seeder
             return;
         }
 
+        foreach (Registration::orderBy('id')->get() as $i => $registration) {
+            $registration->created_at = now()->subMonths($i % 6)->subDays(($i * 5) % 20);
+            $registration->save();
+        }
+
         $unit1 = $physics->units()->create(['title' => 'الوحدة 1: الحركة والقوى', 'position' => 1]);
         $unit2 = $physics->units()->create(['title' => 'الوحدة 2: الشغل والطاقة', 'position' => 2]);
 
@@ -111,19 +116,26 @@ class AcademicSeeder extends Seeder
         }
 
         $statuses = ['present', 'present', 'present', 'late', 'absent', 'excused'];
-        for ($week = 1; $week <= 4; $week++) {
-            $session = ClassSession::create([
-                'course_id' => $physics->id,
-                'starts_at' => now()->subWeeks($week)->setTime(9, 0),
-                'room' => 'قاعة A',
-            ]);
-
-            foreach ($students as $j => $student) {
-                Attendance::create([
-                    'class_session_id' => $session->id,
-                    'student_id' => $student->id,
-                    'status' => $j == 0 ? 'present' : $statuses[($j + $week) % count($statuses)],
+        foreach ($courses as $c => $course) {
+            for ($week = 1; $week <= 8; $week++) {
+                $session = ClassSession::create([
+                    'course_id' => $course->id,
+                    'starts_at' => now()->subWeeks($week)->setTime(9 + $c * 4, 0),
+                    'room' => $c == 0 ? 'قاعة A' : 'المرسم',
                 ]);
+
+                foreach ($students as $j => $student) {
+                    $status = $statuses[($j + $week + $c) % count($statuses)];
+                    if ($j == 0 || ($c == 0 && $week % 3 == 0)) {
+                        $status = 'present';
+                    }
+
+                    Attendance::create([
+                        'class_session_id' => $session->id,
+                        'student_id' => $student->id,
+                        'status' => $status,
+                    ]);
+                }
             }
         }
 

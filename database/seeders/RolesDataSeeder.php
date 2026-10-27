@@ -19,6 +19,7 @@ class RolesDataSeeder extends Seeder
     
     protected $ability = [
         'enroll_courses' => 'Enroll Courses',
+        'view_reports' => 'View Reports',
         'all_roles' => 'All Roles',
 
         'all_users' => 'All Users',

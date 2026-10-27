@@ -10,6 +10,7 @@
   $manage = [
     ['admin.users.index', 'admin.users.*', 'dash.users', 'all_users'],
     ['admin.roles.index', 'admin.roles.*', 'dash.roles', 'all_users'],
+    ['admin.reports.index', 'admin.reports.*', 'dash.reports', 'view_reports'],
     ['admin.messages.index', 'admin.messages.*', 'dash.messages', 'all_users'],
   ];
   $visible = function ($items) use ($me) {
