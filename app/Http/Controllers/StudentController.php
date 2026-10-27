@@ -89,7 +89,7 @@ class StudentController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'email:rfc,filter', 'max:255', Rule::unique('users')->ignore($user->id)],
             'no_phone' => ['nullable', 'string', 'max:30', Rule::unique('students', 'no_phone')->ignore(optional($student)->id)],
             'major' => ['nullable', 'string', 'max:255'],
         ]);

@@ -46,7 +46,7 @@ class TeacherController extends Controller
             'name' => 'required|string|max:255',
             'major' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email:rfc,filter|unique:users',
             'password' => 'required|min:8|confirmed',
             'image' => 'required|image|max:2048',
         ]);

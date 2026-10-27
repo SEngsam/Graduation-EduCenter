@@ -39,4 +39,15 @@ class ContactTest extends TestCase
 
         $this->assertEquals(0, ContactMessage::count());
     }
+
+    public function test_email_with_new_line_is_rejected()
+    {
+        $this->actingAs($this->makeStudent())->post('/contact', [
+            'name' => 'سارة',
+            'mail' => "sara@example.com\r\nBcc: x@example.com",
+            'message' => 'مرحبا',
+        ])->assertSessionHasErrors('mail');
+
+        $this->assertEquals(0, ContactMessage::count());
+    }
 }
