@@ -33,9 +33,9 @@ class NotificationController extends Controller
 
         $settingTypes = User::EMAIL_TYPES;
         if ($user->hasRole(Role::ROLE_STUDENT)) {
-            unset($settingTypes['submission']);
+            unset($settingTypes['submission'], $settingTypes['question']);
         } else {
-            $settingTypes = ['submission' => false];
+            $settingTypes = ['submission' => false, 'question' => false];
         }
 
         return view('notifications.index', compact('notifications', 'filter', 'settingTypes'));

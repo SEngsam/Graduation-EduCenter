@@ -26,6 +26,8 @@ return [
     'setting_absent' => 'لما أنسجّل غايب',
     'setting_lesson' => 'لما ينزل درس جديد',
     'setting_submission' => 'لما طالب يسلّم واجب',
+    'setting_question' => 'لما طالب يسأل سؤال',
+    'setting_reply' => 'لما حدا يرد على سؤالي',
 
     'grade' => 'نزلت علامتك بـ <strong>:title</strong>: :grade من :max',
     'assignment' => 'واجب جديد: <strong>:title</strong>، آخر موعد :due',
@@ -34,6 +36,8 @@ return [
     'lesson' => 'درس جديد: <strong>:title</strong>',
     'submission' => '<strong>:name</strong> سلّم واجب :title',
     'category' => 'انضاف قسم جديد: <strong>:name</strong>',
+    'question' => '<strong>:name</strong> سأل: :title',
+    'reply' => '<strong>:name</strong> رد على سؤالك: :title',
 
     'subject_grade' => 'نزلت علامتك بـ :title',
     'subject_assignment' => 'واجب جديد: :title',
@@ -42,6 +46,8 @@ return [
     'subject_lesson' => 'درس جديد: :title',
     'subject_submission' => 'تسليم جديد: :title',
     'subject_category' => 'قسم جديد: :name',
+    'subject_question' => 'سؤال جديد: :title',
+    'subject_reply' => 'رد جديد على سؤالك',
 
     'hello' => 'مرحبا :name،',
     'open' => 'شوف التفاصيل',

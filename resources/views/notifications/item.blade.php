@@ -13,6 +13,8 @@
       'lesson' => ['book', 'info'],
       'submission' => ['upload', 'info'],
       'category' => ['grid', 'info'],
+      'question' => ['message', 'info'],
+      'reply' => ['message', 'ok'],
   ];
   [$icon, $tone] = $icons[$type] ?? ['bell', 'info'];
 @endphp

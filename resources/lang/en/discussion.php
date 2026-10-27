@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'title' => 'Discussion',
+    'course' => 'Course',
+    'ask' => 'Ask a question',
+    'which_lesson' => 'Which lesson?',
+    'general' => 'General',
+    'question' => 'Question',
+    'question_placeholder' => 'Write your question briefly',
+    'details' => 'Details (optional)',
+    'send' => 'Ask',
+    'replies' => '{0} No replies|{1} 1 reply|[2,*] :n replies',
+    'answered' => 'Teacher answered',
+    'waiting' => 'Waiting for an answer',
+    'teacher' => 'Teacher',
+    'your_reply' => 'Your reply',
+    'reply_placeholder' => 'Write your reply…',
+    'post_reply' => 'Post reply',
+    'empty' => 'No questions yet. If something is unclear, ask here.',
+    'empty_teacher' => 'No questions from students yet.',
+    'asked' => 'Your question was posted.',
+    'deleted' => 'Deleted.',
+    'delete' => 'Delete',
+    'confirm_question' => 'Delete the question ":name" and all its replies?',
+    'confirm_reply' => 'Delete this reply?',
+];

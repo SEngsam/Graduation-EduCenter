@@ -51,6 +51,8 @@ class User extends Authenticatable
         'absent' => true,
         'lesson' => false,
         'submission' => false,
+        'question' => false,
+        'reply' => false,
     ];
 
 

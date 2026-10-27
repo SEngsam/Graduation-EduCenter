@@ -26,6 +26,8 @@ return [
     'setting_absent' => 'When I am marked absent',
     'setting_lesson' => 'When a new lesson is posted',
     'setting_submission' => 'When a student hands in work',
+    'setting_question' => 'When a student asks a question',
+    'setting_reply' => 'When someone replies to my question',
 
     'grade' => 'Your grade for <strong>:title</strong>: :grade out of :max',
     'assignment' => 'New assignment: <strong>:title</strong>, due :due',
@@ -34,6 +36,8 @@ return [
     'lesson' => 'New lesson: <strong>:title</strong>',
     'submission' => '<strong>:name</strong> handed in :title',
     'category' => 'New category added: <strong>:name</strong>',
+    'question' => '<strong>:name</strong> asked: :title',
+    'reply' => '<strong>:name</strong> replied to your question: :title',
 
     'subject_grade' => 'Your grade for :title',
     'subject_assignment' => 'New assignment: :title',
@@ -42,6 +46,8 @@ return [
     'subject_lesson' => 'New lesson: :title',
     'subject_submission' => 'New submission: :title',
     'subject_category' => 'New category: :name',
+    'subject_question' => 'New question: :title',
+    'subject_reply' => 'New reply to your question',
 
     'hello' => 'Hi :name,',
     'open' => 'See details',

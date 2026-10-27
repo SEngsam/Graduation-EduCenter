@@ -1166,3 +1166,18 @@ dialog.sheet .form-actions { display: flex; gap: 8px; justify-content: flex-end;
 .cert-ready { background: var(--brand-navy); color: var(--ink-inverse); border: 0; }
 .cert-ready h2 { color: var(--ink-inverse); }
 .cert-ready p { color: var(--ink-inverse-muted); margin: 0; }
+
+.thread { gap: 16px; }
+.thread-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.thread-lesson { font-size: 13px; color: var(--orange-text); font-weight: 600; }
+.thread-head h2 { margin-top: 4px; }
+.post { display: flex; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; }
+.post.from-teacher { background: var(--orange-soft); border-color: var(--orange-tint); }
+.post-avatar { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--orange-tint); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+.teacher-tag { padding: 2px 8px; border-radius: 6px; background: var(--brand-navy); color: var(--ink-inverse); font-size: 12px; font-weight: 600; }
+.post-body { flex: 1; min-width: 0; }
+.post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.post-meta small { color: var(--ink-subtle); }
+.post-body p { margin: 6px 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+.post-delete { margin-inline-start: auto; }
+.link-btn { background: none; border: 0; padding: 0; font: inherit; font-size: 13px; color: var(--danger); cursor: pointer; text-decoration: underline; }

@@ -38,6 +38,11 @@
   </div>
 </div>
 
+<nav class="tabs">
+  <a href="{{ route('student.course', $course) }}" class="active">{{ __('discussion.course') }}</a>
+  <a href="{{ route('discussion.index', $course) }}">{{ __('discussion.title') }}</a>
+</nav>
+
 <div class="split">
   <div class="split-main stack">
     <h2 class="block-title">{{ __('site.lessons') }}</h2>

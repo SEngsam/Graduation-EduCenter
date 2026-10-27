@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
@@ -67,6 +68,11 @@ Route::get('/my/courses/{course}/certificate', [CertificateController::class, 's
 Route::post('/my/lessons/{lesson}/done', [StudentCourseController::class, 'toggleLesson'])->name('student.lesson.done');
 Route::get('/my/lessons/{lesson}/file', [StudentCourseController::class, 'lessonFile'])->name('student.lesson.file');
 Route::post('/my/assignments/{assignment}/submit', [StudentCourseController::class, 'submit'])->name('student.assignment.submit');
+Route::get('/courses/{course}/discussion', [DiscussionController::class, 'index'])->name('discussion.index');
+Route::post('/courses/{course}/discussion', [DiscussionController::class, 'store'])->name('discussion.store');
+Route::post('/questions/{question}/replies', [DiscussionController::class, 'reply'])->name('discussion.reply');
+Route::delete('/questions/{question}', [DiscussionController::class, 'destroy'])->name('discussion.destroy');
+Route::delete('/replies/{reply}', [DiscussionController::class, 'destroyReply'])->name('discussion.reply.destroy');
 
 Route::prefix('teach')->name('teach.')->middleware('teacher')->group(function () {
     Route::get('/', [Teach\DashboardController::class, 'index'])->name('dashboard');

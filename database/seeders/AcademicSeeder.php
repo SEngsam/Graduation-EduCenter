@@ -6,7 +6,9 @@ use App\Models\Assignment;
 use App\Models\Attendance;
 use App\Models\ClassSession;
 use App\Models\Course;
+use App\Models\CourseQuestion;
 use App\Models\Lesson;
+use App\Models\QuestionReply;
 use App\Models\Registration;
 use App\Models\Role;
 use App\Models\Student;
@@ -181,5 +183,50 @@ class AcademicSeeder extends Seeder
                 ]);
             }
         }
+
+        $example = Lesson::where('course_id', $physics->id)->where('title', 'أمثلة على القوة والتسارع')->first();
+        $newton = Lesson::where('course_id', $physics->id)->where('title', 'قوانين نيوتن الثلاثة')->first();
+
+        $q1 = CourseQuestion::create([
+            'course_id' => $physics->id,
+            'lesson_id' => $example->id,
+            'user_id' => $students[0]->user_id,
+            'title' => 'كيف بنعرف إذا الجسم عم يتسارع؟',
+            'body' => 'بالمثال التاني السرعة ضلت ثابتة بس الاتجاه تغيّر. هيك بيعتبر تسارع؟',
+            'created_at' => now()->subDay(),
+        ]);
+        QuestionReply::create([
+            'course_question_id' => $q1->id,
+            'user_id' => $teacher->user_id,
+            'body' => 'إيه، التسارع هو أي تغيّر بالسرعة، بالمقدار أو بالاتجاه. بالحركة الدائرية مثلاً السرعة ثابتة بس في تسارع لأن الاتجاه عم يتغيّر.',
+            'created_at' => now()->subDay()->addHours(2),
+        ]);
+        QuestionReply::create([
+            'course_question_id' => $q1->id,
+            'user_id' => $students[1]->user_id,
+            'body' => 'يعني القمر عم يتسارع طول الوقت؟',
+            'created_at' => now()->subHour(),
+        ]);
+
+        $q2 = CourseQuestion::create([
+            'course_id' => $physics->id,
+            'lesson_id' => $newton->id,
+            'user_id' => $students[1]->user_id,
+            'title' => 'ليش القوة بالمسألة 4 سالبة؟',
+            'created_at' => now()->subDays(3),
+        ]);
+        QuestionReply::create([
+            'course_question_id' => $q2->id,
+            'user_id' => $teacher->user_id,
+            'body' => 'لأنها عكس اتجاه الحركة. اخترنا اتجاه الحركة هو الموجب، فأي قوة عكسه بتطلع سالبة.',
+            'created_at' => now()->subDays(3)->addHours(5),
+        ]);
+
+        CourseQuestion::create([
+            'course_id' => $physics->id,
+            'user_id' => $students[2]->user_id,
+            'title' => 'في ملف حلول للتمارين؟',
+            'created_at' => now()->subHours(5),
+        ]);
     }
 }

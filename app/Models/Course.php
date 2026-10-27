@@ -46,6 +46,11 @@ class Course extends Model
         return $this->hasMany(Assignment::class)->orderBy('due_at');
     }
 
+    public function questions()
+    {
+        return $this->hasMany(CourseQuestion::class)->latest();
+    }
+
     public function slots()
     {
         return $this->hasMany(CourseSlot::class)->orderBy('day')->orderBy('starts_at');
