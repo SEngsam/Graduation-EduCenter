@@ -30,9 +30,7 @@
       <tbody>
         @forelse ($categories as $category)
           @php
-            $photo = $category->image && file_exists(public_path('uploads/categories/' . $category->image))
-                ? asset('uploads/categories/' . $category->image)
-                : asset('frontend/images/courses/course-' . ($category->id % 6 + 1) . '.jpg');
+            $photo = $category->photo();
           @endphp
           <tr>
             <td><span class="record"><img src="{{ $photo }}" alt="">{{ $category->name_major }}</span></td>

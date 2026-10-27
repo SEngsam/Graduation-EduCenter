@@ -1,7 +1,5 @@
 @php
-    $photo = $item->image && file_exists(public_path('uploads/news/' . $item->image))
-        ? asset('uploads/news/' . $item->image)
-        : asset('frontend/images/blog/post-' . ($item->id % 3 + 1) . '.jpg');
+    $photo = $item->photo();
 @endphp
 <article class="card news-row">
   <div class="thumb">

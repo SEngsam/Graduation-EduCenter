@@ -16,10 +16,6 @@ class Teacher extends Model
 
 
 
-    public function registrations()
-    {
-        return $this->belongsTo(Registration::class);
-    }
 
     public function student()
     {
@@ -48,5 +44,13 @@ class Teacher extends Model
             });
         });
     }
-    
+
+    public function photo()
+    {
+        if ($this->image && file_exists(public_path('uploads/teachers/' . $this->image))) {
+            return asset('uploads/teachers/' . $this->image);
+        }
+
+        return asset('frontend/images/teachers/teacher-' . ($this->id % 3 + 1) . '.jpg');
+    }
 }

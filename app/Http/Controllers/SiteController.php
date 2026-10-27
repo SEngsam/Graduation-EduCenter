@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Course;
 use App\Models\Teacher;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
@@ -98,13 +99,25 @@ class SiteController extends Controller
 
     public function contact_data(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'mail' => 'required|email|max:255',
+            'major' => 'nullable|string|max:255',
+            'message' => 'required|string|max:3000',
+        ]);
+
+        ContactMessage::create([
+            'name' => $request->name,
+            'email' => $request->mail,
+            'major' => $request->major,
+            'message' => $request->message,
+            'user_id' => auth()->id(),
+        ]);
 
         $name = $request->name;
         $mail = $request->mail;
         $major = $request->major;
         $message = $request->message;
-
-        // dd($request->all());
 
         return view('site.contact_data', compact('name', 'mail', 'major', 'message'));
     }
@@ -114,8 +127,11 @@ class SiteController extends Controller
         if (!auth()->check()) {
             return false; 
         }
-        $auth_user = auth()->user();  
-        $student = $auth_user->student ?? $auth_user;
+        $student = auth()->user()->student;
+        if (!$student) {
+            return false;
+        }
+
         return \App\Models\Registration::where('student_id', $student->id)
             ->where('course_id', $courseId)
             ->exists();

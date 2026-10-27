@@ -1,4 +1,3 @@
-{{-- $edit (url|null), $destroy (url|null), $label (record name) --}}
 <span class="row-actions">
   @if (! empty($edit))
     <a href="{{ $edit }}" class="btn btn-outline btn-sm" aria-label="{{ __('dash.edit') }} {{ $label }}">{{ __('dash.edit') }}</a>

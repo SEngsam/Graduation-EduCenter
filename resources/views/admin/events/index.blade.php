@@ -27,9 +27,7 @@
       <tbody>
         @forelse ($events as $event)
           @php
-            $photo = $event->image && file_exists(public_path('uploads/events/' . $event->image))
-                ? asset('uploads/events/' . $event->image)
-                : asset('frontend/images/events/event-' . ($event->id % 3 + 1) . '.jpg');
+            $photo = $event->photo();
           @endphp
           <tr>
             <td><span class="record"><img src="{{ $photo }}" alt=""><span class="clip">{{ $event->description }}</span></span></td>

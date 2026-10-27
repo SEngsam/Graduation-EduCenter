@@ -16,7 +16,7 @@ class CourseController extends Controller
         $this->checkCourse($course);
 
         $course->load(['units.lessons', 'slots']);
-        $course->loadCount(['enrolled', 'lessons']);
+        $course->loadCount(['students', 'lessons']);
         $loose = $course->lessons()->whereNull('course_unit_id')->get();
 
         return view('teach.course', compact('course', 'loose'));

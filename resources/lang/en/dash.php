@@ -126,4 +126,11 @@ return [
     'category_in_use' => "This category can't be deleted because teachers belong to it.",
     'teacher_in_use' => "This teacher can't be deleted because they have courses.",
     'went_wrong' => 'Something went wrong. Please try again.',
+    'messages' => 'Contact messages',
+    'messages_sub' => 'Messages sent from the contact page.',
+    'sender' => 'Sender',
+    'message' => 'Message',
+    'major' => 'Field',
+    'new' => 'New',
+    'no_messages' => 'No messages yet.',
 ];

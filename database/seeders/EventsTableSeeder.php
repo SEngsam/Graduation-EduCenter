@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\Schema;
 use App\Models\Event;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -10,9 +11,9 @@ class EventsTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::disableForeignKeyConstraints();
         Event::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Schema::enableForeignKeyConstraints();
         DB::table('events')->insert([
             [
                 'image' => 'science_fair.png',

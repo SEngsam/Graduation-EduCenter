@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
-use App\Events\Category1Notification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\StudentController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -28,17 +28,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
-
-
-
-
-
-
-//
-
 
 Auth::routes();
 
@@ -89,7 +78,6 @@ Route::prefix('teach')->name('teach.')->middleware('teacher')->group(function ()
 
 });
 
-
 Route::prefix(LaravelLocalization::setLocale())->group(function(){
     Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
         Route::get('/', [AdminController::class, 'index'])->name('index');
@@ -108,31 +96,11 @@ Route::prefix(LaravelLocalization::setLocale())->group(function(){
         Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy')->middleware('ability:delete_user');
 
         Route::resource('roles', RoleController::class)->middleware('ability:all_users');
+        Route::get('messages', [MessageController::class, 'index'])->name('messages.index')->middleware('ability:all_users');
+        Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy')->middleware('ability:all_users');
 
     });
 
     });
 
-
-    Route::view('not_allowed', 'not_allowed');
-
-
-
-
-   //Route::get('/home',function(){
-
-   // if(Auth::check()){
-   //    if(Auth::user()->type =='admin'){
-       //    return view('admin.index');
-
-      //  }else{
-
-      //      return redirect()->route('site.index');
-      // }
-   // }
-//});
-
-
-Route::get('/send',function(){
-    event(new Category1Notification('bouthaina'));
-});
+Route::view('not_allowed', 'not_allowed');

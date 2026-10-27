@@ -146,9 +146,7 @@
       @endforeach
       @if ($news)
         @php
-          $photo = $news->image && file_exists(public_path('uploads/news/' . $news->image))
-              ? asset('uploads/news/' . $news->image)
-              : asset('frontend/images/blog/post-' . ($news->id % 3 + 1) . '.jpg');
+          $photo = $news->photo();
         @endphp
         <a href="{{ route('site.event') }}" class="card happening-item">
           <img class="happening-thumb" src="{{ $photo }}" alt="">

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -84,10 +85,10 @@ class AbilityRoleSeeder extends Seeder
             ['ability_id' => 37, 'role_id' => 8],
             ['ability_id' => 38, 'role_id' => 8],
         ];
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::disableForeignKeyConstraints();
         DB::table('ability_role')->truncate();
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Schema::enableForeignKeyConstraints();
         DB::table('ability_role')->insert($data);
     }
 }

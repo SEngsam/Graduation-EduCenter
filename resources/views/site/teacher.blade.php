@@ -24,9 +24,7 @@
     <div class="grid" style="margin-bottom:72px">
       @forelse ($teachers as $item)
         @php
-          $photo = $item->image && file_exists(public_path('uploads/teachers/' . $item->image))
-              ? asset('uploads/teachers/' . $item->image)
-              : asset('frontend/images/teachers/teacher-' . ($item->id % 3 + 1) . '.jpg');
+          $photo = $item->photo();
           $catName = optional($item->category)->name_major;
           $tone = $tones[strtolower($catName ?? '')] ?? '';
         @endphp

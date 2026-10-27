@@ -68,7 +68,6 @@ class AcademicSeeder extends Seeder
                     Registration::create([
                         'student_id' => $student->id,
                         'course_id' => $course->id,
-                        'teacher_id' => $course->teacher_id,
                     ]);
                 }
             }

@@ -2,8 +2,7 @@
     $tones = ['science' => ['sci', 'flask'], 'arts' => ['art', 'palette'], 'technology' => ['tech', 'screen']];
     $major = strtolower(optional(optional($item->teacher)->category)->name_major ?? '');
     [$tone, $icon] = $tones[$major] ?? ['', 'book'];
-    $hasImage = $item->image && file_exists(public_path('uploads/courses/' . $item->image));
-    $photo = $hasImage ? asset('uploads/courses/' . $item->image) : asset('frontend/images/courses/course-' . ($item->id % 6 + 1) . '.jpg');
+    $photo = $item->photo();
     $enrolled = $item->is_enrolled ?? false;
 @endphp
 <article class="card course-card {{ $enrolled ? 'is-enrolled' : '' }}">
@@ -24,11 +23,7 @@
     @endisset
     <div class="course-foot">
       @if ($item->teacher)
-        @if ($item->teacher->image && file_exists(public_path('uploads/teachers/' . $item->teacher->image)))
-          <img class="avatar" src="{{ asset('uploads/teachers/' . $item->teacher->image) }}" alt="">
-        @else
-          <img class="avatar" src="{{ asset('frontend/images/teachers/teacher-' . ($item->teacher->id % 3 + 1) . '.jpg') }}" alt="">
-        @endif
+        <img class="avatar" src="{{ $item->teacher->photo() }}" alt="">
         <span class="teacher">{{ $item->teacher->name }}</span>
       @else
         <span class="teacher" style="color:var(--ink-subtle)">{{ __('site.no_teacher') }}</span>

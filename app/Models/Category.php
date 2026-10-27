@@ -31,5 +31,13 @@ class Category extends Model
     // {
     //    return $this->belongsTo(Teacher::class);
     // }
-    
+
+    public function photo()
+    {
+        if ($this->image && file_exists(public_path('uploads/categories/' . $this->image))) {
+            return asset('uploads/categories/' . $this->image);
+        }
+
+        return asset('frontend/images/courses/course-' . ($this->id % 6 + 1) . '.jpg');
+    }
 }

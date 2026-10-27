@@ -14,7 +14,7 @@ class AttendanceController extends Controller
     {
         $this->checkCourse($course);
 
-        $students = $course->enrolled()->orderBy('name')->get();
+        $students = $course->students()->orderBy('name')->get();
         $slot = $course->slots()->where('day', now()->dayOfWeek)->first();
 
         $date = $request->input('date', today()->toDateString());
@@ -60,7 +60,7 @@ class AttendanceController extends Controller
             ['room' => $request->room]
         );
 
-        $studentIds = $course->enrolled()->pluck('students.id')->toArray();
+        $studentIds = $course->students()->pluck('students.id')->toArray();
         $notes = $request->input('note', []);
 
         foreach ($request->status as $studentId => $status) {

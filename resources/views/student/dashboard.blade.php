@@ -25,9 +25,7 @@
   </div>
   @forelse ($courses as $course)
     @php
-      $photo = $course->image && file_exists(public_path('uploads/courses/' . $course->image))
-          ? asset('uploads/courses/' . $course->image)
-          : asset('frontend/images/courses/course-' . ($course->id % 6 + 1) . '.jpg');
+      $photo = $course->photo();
       $category = optional(optional($course->teacher)->category)->name_major;
       $percent = $progress[$course->id] ?? 0;
     @endphp

@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $courses = $this->myCourses()->withCount(['enrolled', 'lessons'])->with('slots')->get();
+        $courses = $this->myCourses()->withCount(['students', 'lessons'])->with('slots')->get();
         $courseIds = $courses->pluck('id');
 
         $today = CourseSlot::with('course')

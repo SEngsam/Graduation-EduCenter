@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\Schema;
 use App\Models\Course;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -10,9 +11,9 @@ class CoursesTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::disableForeignKeyConstraints();
         Course::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Schema::enableForeignKeyConstraints();
         DB::table('courses')->insert([
             [
                 'image' => 'physics_course.png',

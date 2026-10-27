@@ -1,7 +1,5 @@
 @php
-    $photo = $item->image && file_exists(public_path('uploads/events/' . $item->image))
-        ? asset('uploads/events/' . $item->image)
-        : asset('frontend/images/events/event-' . ($item->id % 3 + 1) . '.jpg');
+    $photo = $item->photo();
 @endphp
 <article class="card event-card">
   <div class="thumb">

@@ -45,9 +45,7 @@
 
     @if ($course->teacher)
       @php
-        $tPhoto = $course->teacher->image && file_exists(public_path('uploads/teachers/' . $course->teacher->image))
-            ? asset('uploads/teachers/' . $course->teacher->image)
-            : asset('frontend/images/teachers/teacher-' . ($course->teacher->id % 3 + 1) . '.jpg');
+        $tPhoto = $course->teacher->photo();
       @endphp
       <section class="card panel teacher-strip">
         <img class="avatar" src="{{ $tPhoto }}" alt="">

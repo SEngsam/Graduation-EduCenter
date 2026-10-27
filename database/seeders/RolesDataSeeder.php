@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
 use App\Models\Ability;
 use App\Models\Role;
@@ -78,10 +79,10 @@ class RolesDataSeeder extends Seeder
             ['name' => 'News Manager'],
 
         ];
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::disableForeignKeyConstraints();
         Ability::truncate();
         Role::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Schema::enableForeignKeyConstraints();
         Role::insert($roles);
 
         foreach($this->ability as $code => $name) {

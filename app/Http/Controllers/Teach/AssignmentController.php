@@ -15,7 +15,7 @@ class AssignmentController extends Controller
         $this->checkCourse($course);
 
         $assignments = $course->assignments()->withCount('submissions')->get();
-        $students = $course->enrolled()->orderBy('name')->get();
+        $students = $course->students()->orderBy('name')->get();
 
         $current = null;
         if ($request->a) {

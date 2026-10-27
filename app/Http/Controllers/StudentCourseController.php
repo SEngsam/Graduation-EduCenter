@@ -14,7 +14,7 @@ class StudentCourseController extends Controller
     {
         $student = auth()->user()->student;
 
-        if (!$student || !$course->enrolled()->where('students.id', $student->id)->exists()) {
+        if (!$student || !$course->students()->where('students.id', $student->id)->exists()) {
             abort(403);
         }
 

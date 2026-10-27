@@ -1,7 +1,7 @@
 <div class="course-head card">
   <div>
     <h1>{{ $course->title }}</h1>
-    <p>{{ __('teach.students_lessons', ['s' => $course->enrolled()->count(), 'l' => $course->lessons()->count()]) }}</p>
+    <p>{{ __('teach.students_lessons', ['s' => $course->students()->count(), 'l' => $course->lessons()->count()]) }}</p>
   </div>
 </div>
 <nav class="tabs">

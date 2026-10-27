@@ -68,9 +68,9 @@
         <tbody>
           @forelse ($registrations as $reg)
             <tr>
-              <td><span class="record">{{ optional($reg->students)->name ?? '—' }}</span></td>
+              <td><span class="record">{{ optional($reg->student)->name ?? '—' }}</span></td>
               <td>{{ optional($reg->course)->title ?? '—' }}</td>
-              <td>{{ optional($reg->teacher)->name ?? __('dash.no_teacher') }}</td>
+              <td>{{ optional(optional($reg->course)->teacher)->name ?? __('dash.no_teacher') }}</td>
               <td class="muted">{{ $reg->created_at ? $reg->created_at->translatedFormat('j M Y') : '—' }}</td>
             </tr>
           @empty

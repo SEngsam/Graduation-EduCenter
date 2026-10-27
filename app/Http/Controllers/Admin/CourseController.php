@@ -174,56 +174,56 @@ class CourseController extends Controller
     {
         $user = auth()->user();
 
-        if (!$user || (!$user->hasRole(Role::ROLE_STUDENT) && !$user->hasAbility('enroll_courses'))) {
-
+        if (!$user->hasRole(Role::ROLE_STUDENT) && !$user->hasAbility('enroll_courses')) {
             return redirect()->back()->with('error', __('site.msg_only_students'));
         }
-
 
         $course = Course::find($course_id);
         if (!$course) {
             return redirect()->back()->with('error', __('site.msg_course_missing'));
         }
-        $student_id = $user->student?->id ?? $user->id;
-        $alreadyEnrolled = Registration::where('student_id', $student_id)
-            ->where('course_id', $course_id)
-            ->exists();
 
-        if ($alreadyEnrolled) {
-
-            return redirect()->back()->with('error', __('site.msg_already_enrolled'));
-        }
-        if (! $course->teacher_id) {
+        if (!$course->teacher_id) {
             return redirect()->back()->with('error', __('site.msg_no_teacher_yet'));
         }
 
-        $teacherId = $course->teacher_id;
+        $student = $user->studentProfile();
+
+        $alreadyEnrolled = Registration::where('student_id', $student->id)
+            ->where('course_id', $course->id)
+            ->exists();
+
+        if ($alreadyEnrolled) {
+            return redirect()->back()->with('error', __('site.msg_already_enrolled'));
+        }
 
         Registration::create([
-            'student_id' => $user->student?->id ?? $user->id,
-            'course_id' => $course_id,
-            'teacher_id' => $teacherId,
+            'student_id' => $student->id,
+            'course_id' => $course->id,
         ]);
 
         return redirect()->back()->with('success', __('site.msg_enrolled'));
     }
+
     public function removeEnrollment($courseId)
     {
-        $auth_user = auth()->user();
-        $student = $auth_user->student ?? $auth_user;
+        $student = auth()->user()->student;
 
         if (!$student) {
             return redirect()->back()->with('error', __('site.msg_no_student'));
         }
 
-        if ($student->courses()->where('courses.id', $courseId)->exists()) {
-            $student->courses()->detach($courseId);
+        $deleted = Registration::where('student_id', $student->id)
+            ->where('course_id', $courseId)
+            ->delete();
 
+        if ($deleted) {
             return redirect()->back()->with('success', __('site.msg_dropped'));
         }
 
         return redirect()->back()->with('error', __('site.msg_not_enrolled'));
     }
+
     public function assignTeacher(Request $request)
     {
         $request->validate([

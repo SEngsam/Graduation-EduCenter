@@ -81,8 +81,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role && $this->role->abilities->contains('code', $code);
     }
-    public function courses()
+    public function studentProfile()
     {
-        return $this->belongsToMany(Course::class, 'registrations', 'student_id', 'course_id');
+        if ($this->student) {
+            return $this->student;
+        }
+
+        return Student::create([
+            'name' => $this->name,
+            'major' => '',
+            'no_phone' => '',
+            'user_id' => $this->id,
+        ]);
     }
 }

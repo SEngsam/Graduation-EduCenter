@@ -27,9 +27,7 @@
       <tbody>
         @forelse ($abouts as $about)
           @php
-            $photo = $about->image && file_exists(public_path('uploads/abouts/' . $about->image))
-                ? asset('uploads/abouts/' . $about->image)
-                : asset('frontend/images/about/about-us.jpg');
+            $photo = $about->photo();
           @endphp
           <tr>
             <td><span class="record"><img src="{{ $photo }}" alt="">{{ $about->title }}</span></td>

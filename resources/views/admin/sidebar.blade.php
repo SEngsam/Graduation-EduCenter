@@ -10,6 +10,7 @@
   $manage = [
     ['admin.users.index', 'admin.users.*', 'dash.users', 'all_users'],
     ['admin.roles.index', 'admin.roles.*', 'dash.roles', 'all_users'],
+    ['admin.messages.index', 'admin.messages.*', 'dash.messages', 'all_users'],
   ];
   $visible = function ($items) use ($me) {
     return array_filter($items, function ($l) use ($me) { return $me->hasAbility($l[3]); });

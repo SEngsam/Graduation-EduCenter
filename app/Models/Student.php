@@ -35,10 +35,6 @@ class Student extends Model
         return $this->hasMany(Submission::class);
     }
 
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class);
-    }
     public function user()
     {
         return $this->belongsTo(User::class);

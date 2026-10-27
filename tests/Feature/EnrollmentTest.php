@@ -63,7 +63,7 @@ class EnrollmentTest extends TestCase
 
         $this->actingAs($student)->delete('/courses/' . $course->id . '/remove-enrollment');
 
-        $this->assertEquals(0, $course->enrolled()->count());
+        $this->assertEquals(0, $course->students()->count());
     }
 
     public function test_login_sends_each_role_to_its_page()

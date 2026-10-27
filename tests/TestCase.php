@@ -87,7 +87,6 @@ abstract class TestCase extends BaseTestCase
         Registration::create([
             'student_id' => $studentUser->student->id,
             'course_id' => $course->id,
-            'teacher_id' => $course->teacher_id,
         ]);
     }
 }

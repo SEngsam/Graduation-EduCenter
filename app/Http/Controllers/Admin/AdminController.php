@@ -34,7 +34,7 @@ class AdminController extends Controller
             'events' => Event::count(),
         ];
 
-        $registrations = Registration::with(['students', 'course', 'teacher'])
+        $registrations = Registration::with(['student', 'course.teacher'])
             ->latest()
             ->take(6)
             ->get();

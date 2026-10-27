@@ -24,11 +24,6 @@ class Course extends Model
         return $this->belongsToMany(Student::class, 'registrations', 'course_id', 'student_id');
     }
 
-    public function enrolled()
-    {
-        return $this->students()->wherePivotNull('deleted_at');
-    }
-
     public function units()
     {
         return $this->hasMany(CourseUnit::class)->orderBy('position')->orderBy('id');
@@ -74,5 +69,13 @@ class Course extends Model
 
         
     }
-}
 
+    public function photo()
+    {
+        if ($this->image && file_exists(public_path('uploads/courses/' . $this->image))) {
+            return asset('uploads/courses/' . $this->image);
+        }
+
+        return asset('frontend/images/courses/course-' . ($this->id % 6 + 1) . '.jpg');
+    }
+}

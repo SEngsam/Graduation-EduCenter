@@ -56,9 +56,7 @@
     <div class="grid">
       @foreach ($teachers as $item)
         @php
-          $photo = $item->image && file_exists(public_path('uploads/teachers/' . $item->image))
-              ? asset('uploads/teachers/' . $item->image)
-              : asset('frontend/images/teachers/teacher-' . ($item->id % 3 + 1) . '.jpg');
+          $photo = $item->photo();
         @endphp
         <div class="card team-row">
           <img class="avatar" src="{{ $photo }}" alt="">

@@ -43,9 +43,7 @@
       <tbody>
         @forelse ($teachers as $teacher)
           @php
-            $photo = $teacher->image && file_exists(public_path('uploads/teachers/' . $teacher->image))
-                ? asset('uploads/teachers/' . $teacher->image)
-                : asset('frontend/images/teachers/teacher-' . ($teacher->id % 3 + 1) . '.jpg');
+            $photo = $teacher->photo();
           @endphp
           <tr>
             <td><span class="record"><img class="round" src="{{ $photo }}" alt="">{{ $teacher->name }}</span></td>

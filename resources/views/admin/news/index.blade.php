@@ -27,9 +27,7 @@
       <tbody>
         @forelse ($n as $post)
           @php
-            $photo = $post->image && file_exists(public_path('uploads/news/' . $post->image))
-                ? asset('uploads/news/' . $post->image)
-                : asset('frontend/images/blog/post-' . ($post->id % 3 + 1) . '.jpg');
+            $photo = $post->photo();
           @endphp
           <tr>
             <td><span class="record"><img src="{{ $photo }}" alt="">{{ $post->title }}</span></td>

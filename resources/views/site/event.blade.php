@@ -10,9 +10,7 @@
   <div class="container" style="padding-bottom:72px">
     @if ($first = $events->first())
       @php
-        $photo = $first->image && file_exists(public_path('uploads/events/' . $first->image))
-            ? asset('uploads/events/' . $first->image)
-            : asset('frontend/images/events/event-' . ($first->id % 3 + 1) . '.jpg');
+        $photo = $first->photo();
       @endphp
       <article class="card featured">
         <img src="{{ $photo }}" alt="">

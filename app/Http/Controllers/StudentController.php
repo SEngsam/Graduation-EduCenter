@@ -15,9 +15,8 @@ class StudentController extends Controller
 {
     public function dashboard()
     {
-        $user = auth()->user();
-        $student = $user->student;
-        $studentId = $student ? $student->id : $user->id;
+        $student = auth()->user()->student;
+        $studentId = $student ? $student->id : 0;
 
         $courses = Registration::where('student_id', $studentId)
             ->with('course.teacher.category')
