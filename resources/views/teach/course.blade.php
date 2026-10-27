@@ -54,7 +54,7 @@
       @forelse ($course->slots as $slot)
         <div class="list-row">
           <span class="list-info">
-            <strong>{{ $slot->dayName() }} · {{ $slot->time() }} - {{ $slot->time('ends_at') }}</strong>
+            <strong>{{ $slot->dayName() }} · <span dir="ltr">{{ $slot->time() }} - {{ $slot->time('ends_at') }}</span></strong>
             @if ($slot->room)<small>{{ $slot->room }}</small>@endif
           </span>
           <form action="{{ route('teach.slots.destroy', $slot) }}" method="POST">
@@ -80,6 +80,9 @@
         <label class="field"><span>{{ __('teach.to') }}</span><input type="time" name="ends_at" required></label>
         <label class="field"><span>{{ __('teach.room') }}</span><input type="text" name="room"></label>
         <button class="btn btn-outline">{{ __('teach.add_slot') }}</button>
+        @if ($errors->has('starts_at') || $errors->has('ends_at'))
+          <small class="error" style="flex-basis:100%">{{ $errors->first('starts_at') ?: $errors->first('ends_at') }}</small>
+        @endif
       </form>
     </section>
   </div>

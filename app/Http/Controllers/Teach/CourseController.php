@@ -117,6 +117,20 @@ class CourseController extends Controller
             'room' => 'nullable|string|max:100',
         ]);
 
+        $courseIds = [$course->id];
+        if ($course->teacher_id) {
+            $courseIds = Course::where('teacher_id', $course->teacher_id)->pluck('id')->toArray();
+        }
+
+        $taken = CourseSlot::with('course')->whereIn('course_id', $courseIds)->get();
+        foreach ($taken as $slot) {
+            if ($slot->overlaps($request->day, $request->starts_at, $request->ends_at)) {
+                return back()->withInput()->withErrors([
+                    'starts_at' => __('teach.slot_clash', ['course' => $slot->course->title, 'time' => $slot->time() . ' - ' . $slot->time('ends_at')]),
+                ]);
+            }
+        }
+
         $course->slots()->create($request->only('day', 'starts_at', 'ends_at', 'room'));
 
         return back()->with('success', __('teach.slot_added'));

@@ -217,4 +217,8 @@ return [
     'today_classes' => "Today's classes",
     'no_classes_today' => 'No classes today.',
     'avg_grade' => 'My average',
+    'msg_time_clash' => 'You can\'t enroll: this course clashes with :course on :day at :time.',
+    'my_schedule' => 'My schedule',
+    'schedule_sub' => 'All your weekly classes in one place, colored by field.',
+    'no_schedule' => 'No classes in your schedule yet.',
 ];

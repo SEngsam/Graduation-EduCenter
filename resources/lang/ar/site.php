@@ -217,4 +217,8 @@ return [
     'today_classes' => 'حصص اليوم',
     'no_classes_today' => 'ما عندك حصص اليوم.',
     'avg_grade' => 'معدّل علاماتي',
+    'msg_time_clash' => 'ما فيك تسجّل، موعد الكورس بيتعارض مع :course يوم :day الساعة :time.',
+    'my_schedule' => 'جدولي',
+    'schedule_sub' => 'كل حصصك بالأسبوع بمكان واحد، ملوّنة حسب القسم.',
+    'no_schedule' => 'لسا ما في حصص بجدولك.',
 ];

@@ -109,4 +109,5 @@ return [
     'already_graded' => 'This one is already graded, so the submission is locked.',
     'submitted' => 'Your work was handed in.',
     'days' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    'slot_clash' => 'This time clashes with :course (:time).',
 ];

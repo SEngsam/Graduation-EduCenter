@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\CourseSlot;
 use App\Models\Registration;
 use App\Models\Role;
 use App\Models\Teacher;
@@ -156,6 +157,21 @@ class CourseController extends Controller
 
         if ($alreadyEnrolled) {
             return back()->with('error', __('site.msg_already_enrolled'));
+        }
+
+        $myCourseIds = Registration::where('student_id', $student->id)->pluck('course_id');
+        $mySlots = CourseSlot::with('course')->whereIn('course_id', $myCourseIds)->get();
+
+        foreach ($course->slots as $newSlot) {
+            foreach ($mySlots as $slot) {
+                if ($slot->overlaps($newSlot->day, $newSlot->starts_at, $newSlot->ends_at)) {
+                    return back()->with('error', __('site.msg_time_clash', [
+                        'course' => $slot->course->title,
+                        'day' => $slot->dayName(),
+                        'time' => $slot->time(),
+                    ]));
+                }
+            }
         }
 
         Registration::create([
