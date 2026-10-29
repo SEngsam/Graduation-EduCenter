@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Hash;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
-
     protected function makeRoles()
     {
         foreach ([1 => 'Super Admin', 4 => 'Teacher', 5 => 'Student'] as $id => $name) {

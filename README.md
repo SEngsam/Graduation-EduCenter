@@ -111,6 +111,8 @@ php artisan test
 ## هيكل المشروع
 
 ```
+bootstrap/app.php                          إعدادات الـ middleware والراوتات (هيكل Laravel 12)
+routes/console.php                         مواعيد الـ Scheduler
 app/Notifications/CourseNotification.php   إشعار واحد لكل الأنواع، بيروح عالقاعدة وعالإيميل
 app/Support/Notifier.php                   بيبعت الإشعار، وإذا فشل الإيميل بيسجّل الخطأ وبيكمّل
 app/Console/Commands/SendDueReminders.php  تذكير قبل موعد التسليم

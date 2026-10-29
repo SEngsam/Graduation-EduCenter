@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\Role;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/home';
 
     protected function redirectTo()
     {
@@ -41,7 +40,7 @@ class RegisterController extends Controller
 
         return $user && $user->hasRole(Role::ROLE_STUDENT)
             ? route('student.dashboard')
-            : RouteServiceProvider::HOME;
+            : '/home';
     }
 
     /**
