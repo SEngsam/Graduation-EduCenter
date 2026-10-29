@@ -13,7 +13,7 @@
 ## التقنيات
 
 - Laravel 12 و PHP 8.2 أو أحدث
-- MySQL، أو SQLite للتجربة السريعة
+- SQLite بشكل افتراضي، أو MySQL
 - Blade و CSS عادي. الألوان والمسافات معرّفة كمتغيرات بملف `public/css/tokens.css`
 - `mcamara/laravel-localization` للغتين بلوحة التحكم
 - API بسيط للقراءة بس، بيرجّع JSON
@@ -21,22 +21,29 @@
 
 ## التشغيل
 
+بتحتاج **PHP 8.2 أو أحدث**، ومعه إضافة `pdo_sqlite` (بتكون شغّالة بأغلب التنزيلات، وبويندوز بتتفعّل من `php.ini`).
+
+### أسرع طريقة
+
+- **ويندوز:** دبل كليك على `start.bat`
+- **ماك ولينكس:** `./start.sh`
+
+أول مرة السكربت بيجهّز كل شي لحاله: بينزّل المكتبات إذا مش موجودة (هون بدك Composer)، وبيعمل ملف `.env`، وبيعمل قاعدة SQLite فيها بيانات التجربة. بعدين بيشغّل السيرفر وبيفتح المتصفح على `http://127.0.0.1:8000`. المرات الجاية بيشغّل السيرفر بس.
+
+### يدوياً
+
 ```bash
-git clone <repo-url> educenter
-cd educenter
 composer install
 cp .env.example .env
 php artisan key:generate
-```
-
-عدّل إعدادات قاعدة البيانات بملف `.env`، وبعدها:
-
-```bash
+touch database/database.sqlite
 php artisan migrate --seed
 php artisan serve
 ```
 
-وافتح `http://127.0.0.1:8000`.
+### على MySQL
+
+بملف `.env` غيّر `DB_CONNECTION=sqlite` لـ `mysql`، وشيل الـ `#` من أول أسطر `DB_HOST` و`DB_DATABASE` وغيرهم، وعبّيهم بمعلومات قاعدتك. بعدين `php artisan migrate --seed`.
 
 ### الإشعارات والتذكيرات
 
@@ -59,16 +66,6 @@ php artisan serve --host=0.0.0.0
 ```
 
 وحط بـ `APP_URL` عنوان الجهاز على الشبكة (متل `http://192.168.1.10:8000`)، لأن رابط الـ QR بينبني منه.
-
-إذا بدك تجرب بسرعة بدون MySQL:
-
-```bash
-touch database/database.sqlite
-# بملف .env:
-# DB_CONNECTION=sqlite
-# DB_DATABASE=/المسار/الكامل/database/database.sqlite
-php artisan migrate --seed
-```
 
 ## حسابات التجربة
 
